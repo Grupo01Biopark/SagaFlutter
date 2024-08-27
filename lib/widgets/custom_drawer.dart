@@ -37,14 +37,14 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.dashboard),
             title: Text('Dashboard'),
             onTap: () {
-              // Ação ao clicar no item
+              Navigator.of(context).pushReplacementNamed('/dashboard');
             },
           ),
           ListTile(
             leading: Icon(Icons.question_answer),
             title: Text('Perguntas'),
             onTap: () {
-              // Ação ao clicar no item
+              Navigator.of(context).pushReplacementNamed('/questions');
             },
           ),
           ExpansionTile(
@@ -55,14 +55,14 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.list),
                 title: Text('Listar Empresas'),
                 onTap: () {
-                  // Ação ao clicar no item
+                  Navigator.of(context).pushReplacementNamed('/companies/list');
                 },
               ),
               ListTile(
                 leading: Icon(Icons.add),
                 title: Text('Cadastrar Empresa'),
                 onTap: () {
-                  // Ação ao clicar no item
+                  Navigator.of(context).pushReplacementNamed('/companies/add');
                 },
               ),
             ],
@@ -75,14 +75,14 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.list),
                 title: Text('Listar Checklists'),
                 onTap: () {
-                  // Ação ao clicar no item
+                  Navigator.of(context).pushReplacementNamed('/checklists/list');
                 },
               ),
               ListTile(
                 leading: Icon(Icons.add),
                 title: Text('Cadastrar Checklist'),
                 onTap: () {
-                  // Ação ao clicar no item
+                  Navigator.of(context).pushReplacementNamed('/checklists/add');
                 },
               ),
             ],
@@ -91,14 +91,14 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.assignment),
             title: Text('Formulários'),
             onTap: () {
-              // Ação ao clicar no item
+              Navigator.of(context).pushReplacementNamed('/forms');
             },
           ),
           ListTile(
             leading: Icon(Icons.verified),
             title: Text('Certificados'),
             onTap: () {
-              // Ação ao clicar no item
+              Navigator.of(context).pushReplacementNamed('/certificates');
             },
           ),
         ],
