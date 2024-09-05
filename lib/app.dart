@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
                 ),
             '/forms': (context) => MainScaffold(
                   body: FormularioPage(),
-                  title: 'Formulario',
+                  title: 'Formulários',
                 ),
           },
         );
