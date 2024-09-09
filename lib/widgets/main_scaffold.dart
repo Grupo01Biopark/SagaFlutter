@@ -6,9 +6,16 @@ import 'custom_drawer.dart';
 class MainScaffold extends StatelessWidget {
   final Widget body;
   final String title;
+  final Color backgroundColor;
+  final Color titleColor;
 
-  const MainScaffold({Key? key, required this.body, required this.title})
-      : super(key: key);
+  const MainScaffold({
+    Key? key, 
+    required this.body, 
+    required this.title,
+    this.backgroundColor = const Color(0xFF0F6FC6),
+    this.titleColor = Colors.white,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +23,12 @@ class MainScaffold extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(
+          title,
+          style: TextStyle(color: titleColor),
+        ),
+        backgroundColor: backgroundColor,
+        iconTheme: IconThemeData(color: titleColor),
       ),
       drawer: CustomDrawer(
         isDarkMode: themeNotifier.isDarkMode,
