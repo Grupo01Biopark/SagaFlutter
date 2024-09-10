@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:saga_flutter_app/pages/dashboard/dashboard.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario.dart';
+import 'package:saga_flutter_app/pages/formulario/formulario_iniciar.dart';
 import 'package:saga_flutter_app/widgets/custom_scroll_behavior.dart';
 import 'widgets/main_scaffold.dart';
 import 'theme/theme_notifier.dart';
@@ -26,9 +27,22 @@ class MyApp extends StatelessWidget {
                   body: FormularioPage(),
                   title: 'Formulários',
                 ),
+            '/forms/iniciar': (context) => MainScaffold(
+                  body: FormularioIniciarPage(),
+                  title: 'Iniciar Formulário',
+                ),
           },
         );
       },
     );
   }
+}
+
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeNotifier(),
+      child: MyApp(),
+    ),
+  );
 }

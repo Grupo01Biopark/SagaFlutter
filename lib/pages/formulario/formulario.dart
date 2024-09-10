@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:saga_flutter_app/pages/formulario/formulario_iniciar.dart';
+
 class ApiFormularioListService {
   final String apiUrl = "http://127.0.0.1:8080/formulario/listar";
 
@@ -24,7 +26,7 @@ class FormularioPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Listagem de Formulários'),
-        iconTheme: IconThemeData(color: Colors.white), // Define a cor do ícone como branca
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<List<dynamic>>(
         future: apiService.fetchData(),
@@ -36,90 +38,78 @@ class FormularioPage extends StatelessWidget {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text('Nenhum dado encontrado'));
           } else {
-            return SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),  // Adiciona espaçamento ao redor da tabela
-                  child: Center(  // Centraliza horizontalmente
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // Sombra para dar um aspecto de card
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  var item = snapshot.data![index];
+                  return Card(
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Título
+                          Text(
+                            item['titulo'] ?? '',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ],
-                      ),
-                      child: DataTable(
-                        columnSpacing: 30,
-                        headingRowColor: MaterialStateColor.resolveWith((states) => Colors.blueGrey[800]!),
-                        headingTextStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                        dataRowColor: MaterialStateColor.resolveWith((states) {
-                          return states.contains(MaterialState.selected)
-                              ? Colors.grey[300]!
-                              : Colors.white;
-                        }),
-                        dataTextStyle: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black87,
-                        ),
-                        columns: [
-                          DataColumn(
-                            label: Text('Título'),
+                          SizedBox(height: 8),
+                          // Descrição
+                          Text(
+                            item['descricao'] ?? '',
+                            style: TextStyle(fontSize: 14),
                           ),
-                          DataColumn(
-                            label: Text('Descrição'),
+                          SizedBox(height: 8),
+                          // Espaço para tags
+                          Text(
+                            'Tags aqui', // Substituir com tags quando disponível
+                            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                           ),
-                          DataColumn(
-                            label: Text('Ações'),
-                          ),
-                        ],
-                        rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
-                          int index = entry.key;
-                          var item = entry.value;
-                          return DataRow(
-                            color: MaterialStateColor.resolveWith((states) {
-                              return index % 2 == 0 ? Colors.grey[100]! : Colors.white;
-                            }),
-                            cells: [
-                              DataCell(Text(item['titulo'] ?? '')),
-                              DataCell(Text(item['descricao'] ?? '')),
-                              DataCell(Row(
-                                children: [
-                                  IconButton(
-                                    icon: Icon(Icons.edit),
-                                    onPressed: () {
-                                      // Implementar ação de edição
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.delete),
-                                    onPressed: () {
-                                      // Implementar ação de exclusão
-                                    },
-                                  ),
-                                ],
-                              )),
+                          SizedBox(height: 8),
+                          // Botões de ação
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.play_arrow),
+                                color: Colors.green,
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => FormularioIniciarPage(),
+                                    ),
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () {
+                                  // Implementar ação de edição
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  // Implementar ação de exclusão
+                                },
+                              ),
                             ],
-                          );
-                        }).toList(),
-                        border: TableBorder(
-                          horizontalInside: BorderSide(color: Colors.grey, width: 0.5),
-                          verticalInside: BorderSide.none, // Remover bordas verticais
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             );
           }
