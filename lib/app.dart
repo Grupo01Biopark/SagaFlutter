@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return Consumer<ThemeNotifier>(
       builder: (context, themeNotifier, child) {
         return MaterialApp(
-          title: 'Flutter Demo',
+          title: 'SAGA',
           scrollBehavior: MyCustomScrollBehavior(),
           debugShowCheckedModeBanner: false,
           theme: themeNotifier.currentTheme,
@@ -26,12 +26,9 @@ class MyApp extends StatelessWidget {
             '/forms': (context) => MainScaffold(
                   body: FormularioPage(),
                   title: 'Formulários',
-                ),
-            '/forms/iniciar': (context) => MainScaffold(
-                  body: FormularioIniciarPage(),
-                  title: 'Iniciar Formulário',
-                ),
+                )
           },
+
         );
       },
     );
