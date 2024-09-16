@@ -55,14 +55,14 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.list),
                 title: Text('Listar Empresas'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/companies/list');
+                  Navigator.of(context).pushReplacementNamed('/empresa');
                 },
               ),
               ListTile(
                 leading: Icon(Icons.add),
                 title: Text('Cadastrar Empresa'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/companies/add');
+                  Navigator.of(context).pushReplacementNamed('/empresa/adicionar');
                 },
               ),
             ],
