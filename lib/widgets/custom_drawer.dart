@@ -55,7 +55,7 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.list),
                 title: Text('Listar Empresas'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/companies/list');
+                  Navigator.of(context).pushReplacementNamed('/empresa/list');
                 },
               ),
               ListTile(
@@ -98,7 +98,7 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.verified),
             title: Text('Certificados'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed('/certificates');
+              Navigator.of(context).pushReplacementNamed('/certificado');
             },
           ),
         ],
