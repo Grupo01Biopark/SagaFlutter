@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:saga_flutter_app/pages/certificado/certificado.dart';
 import 'package:saga_flutter_app/pages/dashboard/dashboard.dart';
 import 'package:saga_flutter_app/pages/empresa/empresa.dart';
 import 'package:saga_flutter_app/pages/empresa/empresa_adicionar.dart';
@@ -41,6 +42,10 @@ class MyApp extends StatelessWidget {
                   body: FormularioIniciarPage(),
                   title: 'Iniciar Formulário',
                 ),
+            '/certificado': (context) => MainScaffold(
+                  body: CertificadoPage(),
+                  title: "Certificados",
+                )
           },
         );
       },
