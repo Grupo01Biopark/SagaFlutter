@@ -62,7 +62,7 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.add),
                 title: Text('Cadastrar Empresa'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/companies/add');
+                  Navigator.of(context).pushReplacementNamed('/empresa/adicionar');
                 },
               ),
             ],
