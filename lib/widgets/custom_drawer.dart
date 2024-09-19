@@ -68,7 +68,7 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.list),
                 title: Text('Listar Empresas'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/empresa/list');
+                  Navigator.of(context).pushReplacementNamed('/empresa');
                 },
               ),
               ListTile(
