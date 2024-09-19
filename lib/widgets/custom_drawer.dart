@@ -40,12 +40,25 @@ class CustomDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed('/dashboard');
             },
           ),
-          ListTile(
+          ExpansionTile(
             leading: Icon(Icons.question_answer),
             title: Text('Perguntas'),
-            onTap: () {
-              Navigator.of(context).pushReplacementNamed('/questions');
-            },
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.list),
+                title: Text('Listar Perguntas'),
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed('/pergunta');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.add),
+                title: Text('Cadastrar Pergunta'),
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed('/pergunta/adicionar');
+                },
+              ),
+            ],
           ),
           ExpansionTile(
             leading: Icon(Icons.business),
