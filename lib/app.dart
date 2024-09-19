@@ -44,13 +44,9 @@ class MyApp extends StatelessWidget {
                   body: AddEmpresaPage(),
                   title: 'Empresa',
                 ),
-            '/forms': (context) => MainScaffold(
+            '/formularios': (context) => MainScaffold(
                   body: FormularioPage(),
                   title: 'Formulários',
-                ),
-            '/forms/iniciar': (context) => MainScaffold(
-                  body: FormularioIniciarPage(),
-                  title: 'Iniciar Formulário',
                 ),
             '/certificado': (context) => MainScaffold(
                   body: CertificadoPage(),
