@@ -104,7 +104,7 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.assignment),
             title: Text('Formulários'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed('/forms');
+              Navigator.of(context).pushReplacementNamed('/formularios');
             },
           ),
           ListTile(
