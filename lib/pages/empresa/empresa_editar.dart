@@ -5,7 +5,8 @@ import 'dart:convert';
 class EditEmpresaPage extends StatefulWidget {
   final int id; // Parâmetro para edição de empresa, agora obrigatório
 
-  EditEmpresaPage({required this.id}); // Construtor que agora requer um id obrigatório
+  EditEmpresaPage(
+      {required this.id}); // Construtor que agora requer um id obrigatório
 
   @override
   _EditEmpresaPageState createState() => _EditEmpresaPageState();
@@ -37,7 +38,8 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
   }
 
   Future<void> _fetchPortesSetores() async {
-    final response = await http.get(Uri.parse("http://127.0.0.1:8080/empresas/listar"));
+    final response =
+        await http.get(Uri.parse("http://127.0.0.1:8080/empresas/listar"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);
@@ -51,7 +53,8 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
   }
 
   Future<void> _fetchEmpresaData(int id) async {
-    final response = await http.get(Uri.parse("http://127.0.0.1:8080/empresas/listar/$id"));
+    final response =
+        await http.get(Uri.parse("http://127.0.0.1:8080/empresas/listar/$id"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);
@@ -90,21 +93,21 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
         },
         "setor": {
           "id": int.parse(_selectedSetor),
-        }
+        },
+        "ativa": 1
       };
-
+      print(empresaData);
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {"Content-Type": "application/json"},
         body: json.encode(empresaData),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('Empresa editada com sucesso!')),
+          SnackBar(content: Text('Empresa editada com sucesso!')),
         );
-        Navigator.pop(context);
+        Navigator.of(context).pushReplacementNamed('/empresa');
       } else {
         var responseJson = json.decode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
