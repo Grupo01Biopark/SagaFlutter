@@ -45,7 +45,6 @@ class _EmpresaPageState extends State<EmpresaPage> {
 
     try {
       final response = await http.delete(Uri.parse(url));
-      print(response.statusCode);
       if (response.statusCode == 201) {
         print('Empresa excluída com sucesso');
         // Recarregar a lista de empresas após exclusão
@@ -130,19 +129,40 @@ class _EmpresaPageState extends State<EmpresaPage> {
                                 style: TextStyle(fontSize: 14),
                               ),
                             SizedBox(height: 8),
-                            Text(
-                              'Data de Cadastro: ${item['dataCadastro'] ?? ''}',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Porte: ${item['porte']?['titulo'] ?? ''}',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Setor: ${item['setor']?['titulo'] ?? ''}',
-                              style: TextStyle(fontSize: 14),
+                            Row(
+                              children: [ // Adiciona um espaço entre os itens
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 4.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blueGrey[100],
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: Text(
+                                    item['setor']?['titulo'] ?? '',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.blueGrey[800]),
+                                  ),
+                                ),
+                                SizedBox(
+                                    width:
+                                        8.0), // Adiciona um espaço entre os itens
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 4.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blueGrey[100],
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: Text(
+                                    item['porte']?['titulo'] ?? '',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.blueGrey[800]),
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 16),
                             Row(

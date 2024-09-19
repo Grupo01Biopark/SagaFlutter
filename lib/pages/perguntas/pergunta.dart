@@ -115,19 +115,57 @@ class _PerguntaPageState extends State<PerguntaPage> {
                             //   style: TextStyle(fontSize: 14),
                             // ),
                             SizedBox(height: 8),
-                            Text(
-                              'Eixo: ${item['eixo']?['titulo'] ?? ''}',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Porte: ${item['porte']?['titulo'] ?? ''}',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Setor: ${item['setor']?['titulo'] ?? ''}',
-                              style: TextStyle(fontSize: 14),
+                            Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 4.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blueGrey[100],
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: Text(
+                                    item['eixo']?['titulo'] ?? '',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.blueGrey[800]),
+                                  ),
+                                ),
+                                SizedBox(
+                                    width:
+                                        8.0), // Adiciona um espaço entre os itens
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 4.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blueGrey[100],
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: Text(
+                                    item['setor']?['titulo'] ?? '',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.blueGrey[800]),
+                                  ),
+                                ),
+                                SizedBox(
+                                    width:
+                                        8.0), // Adiciona um espaço entre os itens
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 4.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blueGrey[100],
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: Text(
+                                    item['porte']?['titulo'] ?? '',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.blueGrey[800]),
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 16),
                             Row(
@@ -185,7 +223,7 @@ class _PerguntaPageState extends State<PerguntaPage> {
                         ),
                       ),
                     );
-                  }else{
+                  } else {
                     return SizedBox.shrink();
                   }
                 },
