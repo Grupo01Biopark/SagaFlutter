@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:saga_flutter_app/pages/login/generate_password.dart';
+import 'package:saga_flutter_app/pages/login/tela_login.dart';
 
 import 'cards.dart';
 
@@ -42,7 +43,7 @@ class _RegistrationUserState extends State<RegistrationUser> {
     }
   }
 
-  void _showDialog(String title, String content) {
+  void _showDialog(String title, String content, [VoidCallback? onConfirm]) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -53,6 +54,9 @@ class _RegistrationUserState extends State<RegistrationUser> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                if (onConfirm != null) {
+                  onConfirm();
+                }
               },
               child: const Text('Confirmar'),
             ),
@@ -69,7 +73,14 @@ class _RegistrationUserState extends State<RegistrationUser> {
     if (validationMessage != null) {
       _showDialog('Erro', validationMessage);
     } else {
-      _showDialog('Cadastro Realizado', 'Cadastro realizado com sucesso!');
+      _showDialog('Cadastro Realizado', 'Cadastro realizado com sucesso!', () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginPage(),
+          ),
+        );
+      });
       // Continue com o processo de cadastro
     }
   }

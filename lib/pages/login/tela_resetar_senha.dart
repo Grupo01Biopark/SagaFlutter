@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:saga_flutter_app/pages/login/email_validator.dart';
+import 'package:saga_flutter_app/pages/login/tela_login.dart';
 
 import 'cards.dart';
 
@@ -78,6 +79,12 @@ class ResetPasswordPage extends StatelessWidget {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const LoginPage(),
+                                      ),
+                                    );
                                   },
                                   child: const Text('Confirmar'),
                                 ),
@@ -98,14 +105,4 @@ class ResetPasswordPage extends StatelessWidget {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: const ResetPasswordPage(),
-    theme: ThemeData(
-      primarySwatch: Colors.blueGrey,
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-    ),
-  ));
 }
