@@ -3,7 +3,7 @@ import 'package:saga_flutter_app/pages/dashboard/dashboard.dart';
 import 'package:saga_flutter_app/pages/login/tela_cadastro_user.dart';
 
 import 'cards.dart';
-import 'resetar_senha.dart';
+import 'tela_resetar_senha.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

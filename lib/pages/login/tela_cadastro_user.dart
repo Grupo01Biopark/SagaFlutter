@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path/path.dart';
+import 'package:path/path.dart' as p;
 import 'package:saga_flutter_app/pages/login/generate_password.dart';
 
 import 'cards.dart';
@@ -17,6 +16,7 @@ class RegistrationUser extends StatefulWidget {
 class _RegistrationUserState extends State<RegistrationUser> {
   Uint8List? _imageData;
   String? _imageName;
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   bool _obscureConfirmPassword = true;
@@ -28,7 +28,7 @@ class _RegistrationUserState extends State<RegistrationUser> {
 
       if (pickedFile != null) {
         final bytes = await pickedFile.readAsBytes();
-        final name = basename(pickedFile.path);
+        final name = p.basename(pickedFile.path);
 
         setState(() {
           _imageData = bytes;
@@ -40,6 +40,51 @@ class _RegistrationUserState extends State<RegistrationUser> {
         print("Error picking image: $e");
       }
     }
+  }
+
+  void _showDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Confirmar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _validateAndSubmit() {
+    final String email = _emailController.text;
+    final String? validationMessage = _validateEmail(email);
+
+    if (validationMessage != null) {
+      _showDialog('Erro', validationMessage);
+    } else {
+      _showDialog('Cadastro Realizado', 'Cadastro realizado com sucesso!');
+      // Continue com o processo de cadastro
+    }
+  }
+
+  String? _validateEmail(String email) {
+    if (email.isEmpty) {
+      return 'O e-mail não pode estar vazio.';
+    }
+    final RegExp emailRegExp = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    if (!emailRegExp.hasMatch(email)) {
+      return 'Por favor, insira um e-mail válido.';
+    }
+    return null;
   }
 
   @override
@@ -71,7 +116,6 @@ class _RegistrationUserState extends State<RegistrationUser> {
                       child: _imageData == null
                           ? Image.asset(
                               'assets/images/Logo_saga.png',
-                              //colocar uma imagem padrão de ava
                               width: 150,
                               height: 150,
                             )
@@ -87,8 +131,9 @@ class _RegistrationUserState extends State<RegistrationUser> {
                       child: const Text('Imagem Perfil'),
                     ),
                     const SizedBox(height: 16),
-                    const TextField(
-                      decoration: InputDecoration(
+                    TextField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
                         labelText: 'E-mail',
                         border: OutlineInputBorder(),
                       ),
@@ -98,8 +143,6 @@ class _RegistrationUserState extends State<RegistrationUser> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _confirmPasswordController,
-                      keyboardType: TextInputType.text,
-                      obscureText: _obscureConfirmPassword,
                       decoration: InputDecoration(
                         labelText: 'Confirmar Senha',
                         border: const OutlineInputBorder(),
@@ -117,7 +160,7 @@ class _RegistrationUserState extends State<RegistrationUser> {
                           },
                         ),
                       ),
-                      style: const TextStyle(fontSize: 16),
+                      obscureText: _obscureConfirmPassword,
                     ),
                     const SizedBox(height: 25),
                     Row(
@@ -125,9 +168,7 @@ class _RegistrationUserState extends State<RegistrationUser> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {
-                              // Lógica de cadastro aqui
-                            },
+                            onPressed: _validateAndSubmit,
                             child: const Text('Cadastrar'),
                           ),
                         ),
