@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatelessWidget {
+  const DashboardPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Esta é a Página de Dashboard'));
+    return const Center(child: Text('Esta é a Página de Dashboard'));
   }
 }
