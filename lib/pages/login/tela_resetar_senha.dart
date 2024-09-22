@@ -45,6 +45,29 @@ class ResetPasswordPage extends StatelessWidget {
                     style: const TextStyle(fontSize: 20),
                   ),
                   const SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Já tenho senha clique aqui!!!",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Color.fromARGB(255, 88, 149, 218),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       final String? validationMessage =
