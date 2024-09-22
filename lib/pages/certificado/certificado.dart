@@ -29,7 +29,8 @@ class ApiCertificadoListService {
   }
 
   Future<void> downloadCertificado(int id) async {
-    final response = await http.get(Uri.parse("http://127.0.0.1:8080/certificado/$id/emitir"));
+    final response = await http
+        .get(Uri.parse("http://127.0.0.1:8080/certificado/$id/emitir"));
 
     if (response.statusCode == 200) {
       final base64Data = base64.encode(response.bodyBytes);
@@ -94,7 +95,7 @@ class CertificadoPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            certificado['id'].toString() ?? '',
+                            certificado['nomeEmpresa'].toString() ?? '',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -111,81 +112,124 @@ class CertificadoPage extends StatelessWidget {
                             style: TextStyle(fontSize: 14),
                           ),
                           SizedBox(height: 8),
-                          Text(
-                            'Nome da Empresa: ${certificado['nomeEmpresa'] ?? ''}',
-                            style: TextStyle(fontSize: 14),
-                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('Nota Governança: '),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: getBackgroundColor(
+                                            certificado['nota_gov'].toString()),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(
+                                        certificado['nota_gov'].toString() ==
+                                                '1'
+                                            ? 'Conforme'
+                                            : certificado['nota_gov']
+                                                        .toString() ==
+                                                    '2'
+                                                ? 'Médio'
+                                                : 'Não conforme',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 100,
+                                  width: 1,
+                                  child: ColoredBox(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('Nota Social: '),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: getBackgroundColor(
+                                            certificado['nota_soc'].toString()),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(
+                                        certificado['nota_soc'].toString() ==
+                                                '1'
+                                            ? 'Conforme'
+                                            : certificado['nota_soc']
+                                                        .toString() ==
+                                                    '2'
+                                                ? 'Médio'
+                                                : 'Não conforme',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 100,
+                                  width: 1,
+                                  child: ColoredBox(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('Nota Ambiental: '),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: getBackgroundColor(
+                                            certificado['nota_amb'].toString()),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(
+                                        certificado['nota_amb'].toString() ==
+                                                '1'
+                                            ? 'Conforme'
+                                            : certificado['nota_amb']
+                                                        .toString() ==
+                                                    '2'
+                                                ? 'Médio'
+                                                : 'Não conforme',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              Text('Nota Governança: '),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: getBackgroundColor(certificado['nota_gov'].toString()),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  certificado['nota_gov'].toString() == '1'
-                                      ? 'Conforme'
-                                      : certificado['nota_gov'].toString() == '2'
-                                          ? 'Médio'
-                                          : 'Não conforme',
-                                  style: TextStyle(color: Colors.white),
-                                ),
+                              Text(
+                                'Status: ',
+                                style: TextStyle(fontSize: 16),
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Text('Nota Social: '),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: getBackgroundColor(certificado['nota_soc'].toString()),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  certificado['nota_soc'].toString() == '1'
-                                      ? 'Conforme'
-                                      : certificado['nota_soc'].toString() == '2'
-                                          ? 'Médio'
-                                          : 'Não conforme',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Text('Nota Ambiental: '),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: getBackgroundColor(certificado['nota_amb'].toString()),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  certificado['nota_amb'].toString() == '1'
-                                      ? 'Conforme'
-                                      : certificado['nota_amb'].toString() == '2'
-                                          ? 'Médio'
-                                          : 'Não conforme',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Text('Status: '),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: getStatusBackgroundColor(certificado['status'].toString()),
+                                  color: getStatusBackgroundColor(
+                                      certificado['status'].toString()),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Text(
@@ -198,18 +242,39 @@ class CertificadoPage extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: () async {
-                              try {
-                                await apiService.downloadCertificado(certificado['id']);
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Erro ao baixar certificado: $e')),
-                                );
-                              }
-                            },
-                            child: Text('Baixar Certificado'),
-                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              if (certificado['status'] ==true) // Directly compare status with true
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    try {
+                                      await apiService.downloadCertificado(
+                                          certificado['id']);
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Erro ao baixar certificado: $e'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Text(
+                                    'Baixar Certificado',
+                                    style: TextStyle(color: Color(0xFF0F6FC6)),
+                                  ),
+                                ),
+                              ElevatedButton(
+                                onPressed: () async {},
+                                child: Text(
+                                  'Visualizar Respostas',
+                                  style: TextStyle(color: Color(0xFF0F6FC6)),
+                                ),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ),
