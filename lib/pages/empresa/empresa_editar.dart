@@ -23,6 +23,8 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
   final TextEditingController _numeroController = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
   final TextEditingController _complementoController = TextEditingController();
+  final TextEditingController _emailController =
+      TextEditingController(); // Novo campo de e-mail
 
   String _selectedPorte = ""; // Variável para armazenar a seleção de Porte
   String _selectedSetor = ""; // Variável para armazenar a seleção de Setor
@@ -68,6 +70,7 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
         _numeroController.text = empresaData['empresas']['numero'];
         _cepController.text = empresaData['empresas']['cep'];
         _complementoController.text = empresaData['empresas']['complemento'];
+        _emailController.text = empresaData['empresas']['email'] != null? empresaData['empresas']['email']:" ";
         _selectedPorte = empresaData['empresas']['porte']['id'].toString();
         _selectedSetor = empresaData['empresas']['setor']['id'].toString();
       });
@@ -88,6 +91,7 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
         "numero": _numeroController.text,
         "cep": _cepController.text,
         "complemento": _complementoController.text,
+        "email": _emailController.text, // Envia o campo de e-mail
         "porte": {
           "id": int.parse(_selectedPorte),
         },
@@ -96,7 +100,7 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
         },
         "ativa": 1
       };
-      print(empresaData);
+
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {"Content-Type": "application/json"},
@@ -201,6 +205,20 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
                 },
               ),
               SizedBox(height: 16),
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                    labelText: 'Email', border: OutlineInputBorder()),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira o e-mail';
+                  } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                    return 'Por favor, insira um e-mail válido';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: _selectedPorte.isNotEmpty ? _selectedPorte : null,
                 decoration: InputDecoration(
@@ -239,7 +257,7 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
                     child: Text(setor['titulo']),
                   );
                 }).toList(),
-                onChanged: (value) {
+                onChanged: (String? value) {
                   setState(() {
                     _selectedSetor = value.toString();
                   });
@@ -254,21 +272,7 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _saveEmpresa,
-                child: Text(
-                  'Salvar Alterações', // Apenas para edição
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF0F6FC6),
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 24, vertical: 22), // Padding do botão
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
+                child: Text('Salvar'),
               ),
             ],
           ),
@@ -276,15 +280,18 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
       ),
     );
   }
-}
 
-void main() {
-  runApp(MaterialApp(
-    home: EditEmpresaPage(
-        id: 1), // Testando com um ID fixo (substitua conforme necessário)
-    theme: ThemeData(
-      primarySwatch: Colors.blueGrey,
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-    ),
-  ));
+  @override
+  void dispose() {
+    // Dispor dos controladores ao destruir o widget
+    _nomeFantasiaController.dispose();
+    _cnpjController.dispose();
+    _razaoSocialController.dispose();
+    _logradouroController.dispose();
+    _numeroController.dispose();
+    _cepController.dispose();
+    _complementoController.dispose();
+    _emailController.dispose(); // Dispor do controlador de e-mail
+    super.dispose();
+  }
 }

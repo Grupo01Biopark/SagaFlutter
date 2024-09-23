@@ -224,19 +224,23 @@ class CertificadoPage extends StatelessWidget {
                                 'Status: ',
                                 style: TextStyle(fontSize: 16),
                               ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: getStatusBackgroundColor(
-                                      certificado['status'].toString()),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  certificado['status'].toString() == 'true'
-                                      ? 'Aprovado'
-                                      : 'Reprovado',
-                                  style: TextStyle(color: Colors.white),
+                              Expanded(
+                                // Envolva o Container com Expanded para ocupar o espaço restante
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: getStatusBackgroundColor(
+                                        certificado['status'].toString()),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    certificado['status'].toString() == 'true'
+                                        ? 'Aprovado'
+                                        : 'Reprovado',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
                               ),
                             ],
@@ -245,7 +249,8 @@ class CertificadoPage extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              if (certificado['status'] ==true) // Directly compare status with true
+                              if (certificado['status'] ==
+                                  true) // Directly compare status with true
                                 ElevatedButton(
                                   onPressed: () async {
                                     try {
