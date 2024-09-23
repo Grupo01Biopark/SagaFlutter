@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:saga_flutter_app/pages/dashboard/dashboard.dart';
 import 'package:saga_flutter_app/pages/empresa/empresa.dart';
+import 'package:saga_flutter_app/pages/checklists/checklists.dart';
+import 'package:saga_flutter_app/pages/checklists/checklists_adicionar.dart';
 import 'package:saga_flutter_app/pages/empresa/empresa_adicionar.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario_iniciar.dart';
@@ -30,7 +32,15 @@ class MyApp extends StatelessWidget {
                   title: 'Empresa',
                 ),
             '/empresa/adicionar': (context) => MainScaffold(
-                  body: AddEmpresaPage(),
+              body: AddEmpresaPage(),
+              title: 'Empresa',
+            ),
+            '/checklists': (context) => MainScaffold(
+                  body: ChecklistPage(),
+                  title: 'Checklists',
+                ),
+            '/checklists/adicionar': (context) => MainScaffold(
+                  body: AddChecklistPage(),
                   title: 'Empresa',
                 ),
             '/forms': (context) => MainScaffold(
