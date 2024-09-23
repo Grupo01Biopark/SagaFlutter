@@ -111,12 +111,6 @@ class FormularioPage extends StatelessWidget {
                                 },
                               ),
                               IconButton(
-                                icon: Icon(Icons.edit),
-                                onPressed: () {
-                                  // Implementar ação de edição
-                                },
-                              ),
-                              IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () {
                                   // Implementar ação de exclusão

@@ -5,6 +5,7 @@ import 'package:saga_flutter_app/pages/dashboard/dashboard.dart';
 import 'package:saga_flutter_app/pages/empresa/empresa.dart';
 import 'package:saga_flutter_app/pages/empresa/empresa_adicionar.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario.dart';
+import 'package:saga_flutter_app/pages/formulario/formulario_cadastro.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario_iniciar.dart';
 import 'package:saga_flutter_app/pages/perguntas/pergunta.dart';
 import 'package:saga_flutter_app/pages/perguntas/pergunta_adicionar.dart';
@@ -44,8 +45,12 @@ class MyApp extends StatelessWidget {
                   body: AddEmpresaPage(),
                   title: 'Empresa',
                 ),
-            '/formularios': (context) => MainScaffold(
+            '/formularios/listagem': (context) => MainScaffold(
                   body: FormularioPage(),
+                  title: 'Formulários',
+                ),
+            '/formularios/cadastro': (context) => MainScaffold(
+                  body: FormularioCadastroPage(),
                   title: 'Formulários',
                 ),
             '/certificado': (context) => MainScaffold(

@@ -55,7 +55,8 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.add),
                 title: Text('Cadastrar Pergunta'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/pergunta/adicionar');
+                  Navigator.of(context)
+                      .pushReplacementNamed('/pergunta/adicionar');
                 },
               ),
             ],
@@ -75,7 +76,8 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.add),
                 title: Text('Cadastrar Empresa'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/empresa/adicionar');
+                  Navigator.of(context)
+                      .pushReplacementNamed('/empresa/adicionar');
                 },
               ),
             ],
@@ -88,7 +90,8 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.list),
                 title: Text('Listar Checklists'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/checklists/list');
+                  Navigator.of(context)
+                      .pushReplacementNamed('/checklists/list');
                 },
               ),
               ListTile(
@@ -100,12 +103,27 @@ class CustomDrawer extends StatelessWidget {
               ),
             ],
           ),
-          ListTile(
+          ExpansionTile(
             leading: Icon(Icons.assignment),
             title: Text('Formulários'),
-            onTap: () {
-              Navigator.of(context).pushReplacementNamed('/formularios');
-            },
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.list),
+                title: Text('Listar Formulários'),
+                onTap: () {
+                  Navigator.of(context)
+                      .pushReplacementNamed('/formularios/listagem');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.add),
+                title: Text('Cadastrar Formulário'),
+                onTap: () {
+                  Navigator.of(context)
+                      .pushReplacementNamed('/formularios/cadastro');
+                },
+              ),
+            ],
           ),
           ListTile(
             leading: Icon(Icons.verified),
