@@ -94,6 +94,7 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+         automaticallyImplyLeading: false,
         title: Text('Adicionar Empresa'),
       ),
       body: Padding(

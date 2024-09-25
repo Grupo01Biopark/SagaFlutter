@@ -91,6 +91,7 @@ class _AddPerguntaPageState extends State<AddPerguntaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+         automaticallyImplyLeading: false,
         title: Text('Adicionar Pergunta'),
       ),
       body: Padding(

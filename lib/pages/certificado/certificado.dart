@@ -68,6 +68,7 @@ class CertificadoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+         automaticallyImplyLeading: false,
         title: Text('Listagem de Certificados'),
         iconTheme: IconThemeData(color: Colors.white),
       ),

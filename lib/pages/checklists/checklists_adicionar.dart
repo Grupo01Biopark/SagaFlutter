@@ -115,6 +115,7 @@ class _AddChecklistPage extends State<AddChecklistPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+         automaticallyImplyLeading: false,
         title: Text('Criar Checklist'),
       ),
       body: Padding(
