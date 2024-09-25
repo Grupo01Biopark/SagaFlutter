@@ -7,6 +7,7 @@ import 'package:saga_flutter_app/pages/checklists/checklists.dart';
 import 'package:saga_flutter_app/pages/checklists/checklists_adicionar.dart';
 import 'package:saga_flutter_app/pages/empresa/empresa_adicionar.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario.dart';
+import 'package:saga_flutter_app/pages/formulario/formulario_cadastro.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario_iniciar.dart';
 import 'package:saga_flutter_app/pages/login/tela_login.dart';
 import 'package:saga_flutter_app/pages/perguntas/pergunta.dart';
@@ -56,8 +57,12 @@ class MyApp extends StatelessWidget {
                   body: AddChecklistPage(),
                   title: 'Empresa',
                 ),
-            '/formularios': (context) => MainScaffold(
+            '/formularios/listagem': (context) => MainScaffold(
                   body: FormularioPage(),
+                  title: 'Formulários',
+                ),
+            '/formularios/cadastro': (context) => MainScaffold(
+                  body: FormularioCadastroPage(),
                   title: 'Formulários',
                 ),
             '/certificado': (context) => MainScaffold(
