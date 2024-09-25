@@ -4,6 +4,9 @@ import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:typed_data';
 
+import 'package:saga_flutter_app/pages/formulario/formulario_respostas.dart';
+import 'package:saga_flutter_app/pages/formulario/formulario_visualizar_resp.dart';
+
 void downloadFileFromBase64(String base64Data, String fileName) {
   final bytes = base64.decode(base64Data);
   final blob = html.Blob([Uint8List.fromList(bytes)]);
@@ -272,7 +275,14 @@ class CertificadoPage extends StatelessWidget {
                                   ),
                                 ),
                               ElevatedButton(
-                                onPressed: () async {},
+                                onPressed: () async {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => FormularioRespostasVisuPage(certId: certificado['id']),
+                                    ),
+                                  );
+                                },
                                 child: Text(
                                   'Visualizar Respostas',
                                   style: TextStyle(color: Color(0xFF0F6FC6)),
