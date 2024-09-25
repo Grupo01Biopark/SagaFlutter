@@ -251,7 +251,22 @@ class _AddChecklistPage extends State<AddChecklistPage> {
                 onPressed: perguntasSelecionadas.values.where((v) => v).length >= 4
                     ? _saveChecklist
                     : null,
-                child: Text('Salvar Checklist'),
+                child: Text(
+                  'Salvar Checklist',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF0F6FC6),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 24, vertical: 22),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(5),
+                  ),
+                ),
               ),
             ],
           ),
