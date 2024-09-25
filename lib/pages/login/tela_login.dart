@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:saga_flutter_app/pages/dashboard/dashboard.dart';
-import 'package:saga_flutter_app/pages/login/tela_cadastro_user.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:saga_flutter_app/pages/user/user_model.dart';
+import 'package:saga_flutter_app/pages/user/user_provider.dart';
 import 'cards.dart';
 import 'tela_resetar_senha.dart';
+import 'tela_cadastro_user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,6 +19,71 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool obscureText = true;
+
+  // Função para fazer login via API
+  Future<void> loginUser() async {
+    final String email = emailController.text;
+    final String password = passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      showErrorDialog("Por favor, insira seu email e senha.");
+      return;
+    }
+
+    final url = Uri.parse('http://127.0.0.1:8080/api/auth/login');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'password': password}),
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        // Tente analisar a resposta como JSON
+        final userData = jsonDecode(response.body);
+        final user = UserModel.fromJson(userData);
+
+        // Armazene os dados do usuário no provider
+        Provider.of<UserProvider>(context, listen: false).setUser(user);
+
+        // Login bem-sucedido
+        Navigator.of(context).pushReplacementNamed('/dashboard');
+      } catch (e) {
+        // Se a resposta não for JSON, trate-a como texto simples
+        if (response.body == "Login successful!") {
+          // Login bem-sucedido, mas sem dados do usuário
+          Navigator.of(context).pushReplacementNamed('/dashboard');
+        } else {
+          // Exibir mensagem de erro
+          showErrorDialog("Resposta inesperada da API.");
+        }
+      }
+    } else {
+      // Login falhou, exibir mensagem de erro
+      showErrorDialog("Email ou senha inválidos. Tente novamente.");
+    }
+  }
+
+  // Exibe diálogo de erro
+  void showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Erro"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,21 +181,19 @@ class _LoginPageState extends State<LoginPage> {
                     height: 60,
                     alignment: Alignment.centerLeft,
                     decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        stops: [0.3, 1],
-                        colors: [
-                          Color.fromARGB(255, 8, 33, 172),
-                          Color.fromARGB(255, 24, 92, 170),
-                        ],
-                      ),
+                      color: Color(0xFF0F6FC6),
                       borderRadius: BorderRadius.all(
                         Radius.circular(5),
                       ),
                     ),
                     child: SizedBox.expand(
                       child: TextButton(
+                        onPressed: () {
+                          loginUser(); // Chamada para a função de login
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: const Color(0xFF0F6FC6),
+                        ),
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -142,47 +208,10 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ],
                         ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const DashboardPage(),
-                            ),
-                          );
-                        },
                       ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Container(
-                    height: 60,
-                    alignment: Alignment.centerLeft,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF3C5A99),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                    ),
-                    child: SizedBox.expand(
-                      child: TextButton(
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "Login Facebook",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ],
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 10),
                   SizedBox(
                     height: 40,

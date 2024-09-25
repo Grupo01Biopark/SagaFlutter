@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatelessWidget {
-  const DashboardPage({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Esta é a Página de Dashboard'));
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dashboard'),
+      ),
+      body: Center(
+        child: Text('Bem-vindo ao SAGssA!'),
+      ),
+    );
   }
+}
+
+
+void main() {
+  runApp(MaterialApp(
+    home: DashboardPage(),
+    theme: ThemeData(
+      primarySwatch: Colors.blueGrey,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+    ),
+  ));
 }

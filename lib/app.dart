@@ -6,6 +6,7 @@ import 'package:saga_flutter_app/pages/empresa/empresa.dart';
 import 'package:saga_flutter_app/pages/empresa/empresa_adicionar.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario_iniciar.dart';
+import 'package:saga_flutter_app/pages/login/tela_login.dart';
 import 'package:saga_flutter_app/pages/perguntas/pergunta.dart';
 import 'package:saga_flutter_app/pages/perguntas/pergunta_adicionar.dart';
 import 'package:saga_flutter_app/widgets/custom_scroll_behavior.dart';
@@ -22,8 +23,9 @@ class MyApp extends StatelessWidget {
           scrollBehavior: MyCustomScrollBehavior(),
           debugShowCheckedModeBanner: false,
           theme: themeNotifier.currentTheme,
-          initialRoute: '/dashboard',
+          initialRoute: '/login',
           routes: {
+            '/login': (context) => LoginPage(),
             '/dashboard': (context) => MainScaffold(
                   body: DashboardPage(),
                   title: 'Dashboard',

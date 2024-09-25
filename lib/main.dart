@@ -1,35 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import './pages/login/tela_login.dart';
-import './theme/theme_notifier.dart';
+import 'package:saga_flutter_app/pages/user/user_provider.dart';
+import 'app.dart';
+import 'theme/theme_notifier.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider<ThemeNotifier>(
-      create: (_) => ThemeNotifier(),
-      child: const MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeNotifier>(create: (_) => ThemeNotifier()),
+        ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
+      ],
+      child: MyApp(),
     ),
   );
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<ThemeNotifier>(
-      builder: (context, themeNotifier, child) {
-        return MaterialApp(
-          title: 'Flutter Demo',
-          theme: themeNotifier.currentTheme,
-          debugShowCheckedModeBanner: false,
-          initialRoute: '/login',
-          routes: {
-            '/login': (context) => const LoginPage(),
-          },
-        );
-      },
-    );
-  }
 }

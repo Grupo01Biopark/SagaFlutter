@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:saga_flutter_app/pages/user/user_provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   final bool isDarkMode;
@@ -8,13 +10,15 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text('Nome do Usuário'),
-            accountEmail: Text('email@exemplo.com'),
+            accountName: Text(user?.name ?? 'Nome do Usuário'),
+            accountEmail: Text(user?.email ?? 'email@exemplo.com'),
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage('URL_DA_FOTO_DO_USUARIO'),
             ),

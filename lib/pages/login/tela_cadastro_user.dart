@@ -1,9 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as p;
 import 'package:saga_flutter_app/pages/login/generate_password.dart';
 import 'package:saga_flutter_app/pages/login/tela_login.dart';
+import 'package:http/http.dart' as http;
 
 import 'cards.dart';
 
@@ -15,33 +16,11 @@ class RegistrationUser extends StatefulWidget {
 }
 
 class _RegistrationUserState extends State<RegistrationUser> {
-  Uint8List? _imageData;
-  String? _imageName;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   bool _obscureConfirmPassword = true;
 
-  Future<void> _pickImage() async {
-    try {
-      final picker = ImagePicker();
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-      if (pickedFile != null) {
-        final bytes = await pickedFile.readAsBytes();
-        final name = p.basename(pickedFile.path);
-
-        setState(() {
-          _imageData = bytes;
-          _imageName = name;
-        });
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error picking image: $e");
-      }
-    }
-  }
 
   void _showDialog(String title, String content, [VoidCallback? onConfirm]) {
     showDialog(
@@ -66,13 +45,26 @@ class _RegistrationUserState extends State<RegistrationUser> {
     );
   }
 
-  void _validateAndSubmit() {
-    final String email = _emailController.text;
-    final String? validationMessage = _validateEmail(email);
+void _validateAndSubmit() async {
+  final String email = _emailController.text;
+  final String? validationMessage = _validateEmail(email);
 
-    if (validationMessage != null) {
-      _showDialog('Erro', validationMessage);
-    } else {
+  if (validationMessage != null) {
+    _showDialog('Erro', validationMessage);
+  } else {
+    // Preparando a requisição para a API de cadastro
+    final url = Uri.parse('http://127.0.0.1:8080/api/auth/register');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'email': _emailController.text,
+        'password': _confirmPasswordController.text,
+      }),
+    );
+
+    // Processar a resposta do servidor
+    if (response.statusCode == 200) {
       _showDialog('Cadastro Realizado', 'Cadastro realizado com sucesso!', () {
         Navigator.pushReplacement(
           context,
@@ -81,9 +73,14 @@ class _RegistrationUserState extends State<RegistrationUser> {
           ),
         );
       });
-      // Continue com o processo de cadastro
+    } else if (response.statusCode == 400) {
+      final responseBody = jsonDecode(response.body);
+      _showDialog('Erro', responseBody['message'] ?? 'Erro ao registrar');
+    } else {
+      _showDialog('Erro', 'Ocorreu um erro inesperado. Tente novamente.');
     }
   }
+}
 
   String? _validateEmail(String email) {
     if (email.isEmpty) {
@@ -123,24 +120,6 @@ class _RegistrationUserState extends State<RegistrationUser> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Center(
-                      child: _imageData == null
-                          ? Image.asset(
-                              'assets/images/Logo_saga.png',
-                              width: 150,
-                              height: 150,
-                            )
-                          : Image.memory(
-                              _imageData!,
-                              width: 150,
-                              height: 150,
-                            ),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: _pickImage,
-                      child: const Text('Imagem Perfil'),
-                    ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: _emailController,
