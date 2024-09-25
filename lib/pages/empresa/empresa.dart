@@ -113,6 +113,11 @@ class _EmpresaPageState extends State<EmpresaPage> {
                             ),
                             SizedBox(height: 8),
                             Text(
+                              'E-mail: ${item['email'] ?? ''}',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
                               'Endereço: ${item['logradouro'] ?? ''}, ${item['numero'] ?? ''}',
                               style: TextStyle(fontSize: 14),
                             ),

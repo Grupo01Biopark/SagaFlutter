@@ -18,6 +18,8 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
   final TextEditingController _numeroController = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
   final TextEditingController _complementoController = TextEditingController();
+  final TextEditingController _emailController =
+      TextEditingController(); // Controlador para o campo de e-mail
 
   String _selectedPorte = ""; // Variável para armazenar a seleção de Porte
   String _selectedSetor = ""; // Variável para armazenar a seleção de Setor
@@ -54,6 +56,7 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
         "nomeFantasia": _nomeFantasiaController.text,
         "cnpj": _cnpjController.text,
         "razaoSocial": _razaoSocialController.text,
+        "email": _emailController.text, // Incluindo o campo de e-mail
         "logradouro": _logradouroController.text,
         "numero": _numeroController.text,
         "cep": _cepController.text,
@@ -136,6 +139,21 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
               ),
               SizedBox(height: 16),
               TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                    labelText: 'Email', border: OutlineInputBorder()),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira o e-mail';
+                  } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                      .hasMatch(value)) {
+                    return 'Por favor, insira um e-mail válido';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              TextFormField(
                 controller: _logradouroController,
                 decoration: InputDecoration(
                     labelText: 'Logradouro', border: OutlineInputBorder()),
@@ -172,22 +190,20 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
               ),
               SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: null, // Agora estamos usando _selectedPorte como o valor inicial
+                value: null,
                 decoration: InputDecoration(
                   labelText: 'Porte',
-                  border:
-                      OutlineInputBorder(), // Mesmo padrão dos TextFormFields
+                  border: OutlineInputBorder(),
                 ),
                 items: portes.map<DropdownMenuItem<String>>((dynamic porte) {
                   return DropdownMenuItem<String>(
-                    value: '${porte['id'].toString()}', // O valor que será enviado (ID)
-                    child: Text(porte['titulo']), // O texto que será exibido
+                    value: '${porte['id'].toString()}',
+                    child: Text(porte['titulo']),
                   );
                 }).toList(),
                 onChanged: (String? value) {
                   setState(() {
-                    _selectedPorte = value
-                        .toString(); // Atualiza a variável com o ID selecionado
+                    _selectedPorte = value.toString();
                   });
                 },
                 validator: (value) {
@@ -202,18 +218,17 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
                 value: null,
                 decoration: InputDecoration(
                   labelText: 'Setor',
-                  border:
-                      OutlineInputBorder(), // Mesmo padrão dos TextFormFields
+                  border: OutlineInputBorder(),
                 ),
                 items: setores.map<DropdownMenuItem<String>>((dynamic setor) {
                   return DropdownMenuItem<String>(
-                    value: '${setor['id'].toString()}', // O valor que será enviado
-                    child: Text(setor['titulo']), // O texto que será exibido
+                    value: '${setor['id'].toString()}',
+                    child: Text(setor['titulo']),
                   );
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
-                    _selectedSetor = value.toString(); // Atualiza a seleção
+                    _selectedSetor = value.toString();
                   });
                 },
                 validator: (value) {
@@ -229,18 +244,15 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
                 child: Text(
                   'Adicionar Empresa',
                   style: TextStyle(
-                    color: Colors.white, // Define o texto branco
-                    fontSize: 20, // Tamanho da fonte opcional
+                    color: Colors.white,
+                    fontSize: 20,
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF0F6FC6),
-                  // Cor do texto quando pressionado
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 24, vertical: 22), // Padding do botão
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 22),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(5), // Bordas arredondadas de 5px
+                    borderRadius: BorderRadius.circular(5),
                   ),
                 ),
               ),

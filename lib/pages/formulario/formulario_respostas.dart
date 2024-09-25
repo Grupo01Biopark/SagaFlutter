@@ -186,6 +186,7 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
     }
 
     for (var pergunta in perguntasGovernanca) {
+      
       responsesByAxis['respostasGov']?.add({
         'idPergunta': pergunta['id'].toString(),
         'conformidade': responses[pergunta['id']] ?? '',
@@ -228,33 +229,33 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
       final jsonResponse = json.decode(decodedResponse);
 
       if (jsonResponse['success']) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Respostas salvas com sucesso!',
-                style: TextStyle(
-                  color: Colors.white, // Cor do texto
-                  fontSize: 16, // Tamanho da fonte
-                  fontWeight: FontWeight.bold, // Peso da fonte
-                ),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Respostas salvas com sucesso!',
+              style: TextStyle(
+                color: Colors.white, // Cor do texto
+                fontSize: 16, // Tamanho da fonte
+                fontWeight: FontWeight.bold, // Peso da fonte
               ),
-              backgroundColor: Colors.green,
-              behavior: SnackBarBehavior.floating,
-              duration: Duration(seconds: 2),
+            ),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainScaffold(
+                body: FormularioPage(),
+                title: 'Formulários',
+              ),
             ),
           );
-
-          Future.delayed(Duration(seconds: 2), () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MainScaffold(
-                  body: FormularioPage(),
-                  title: 'Formulários',
-                ),
-              ),
-            );
-          });
+        });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
