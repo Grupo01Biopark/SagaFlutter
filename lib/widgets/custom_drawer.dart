@@ -92,14 +92,14 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.list),
                 title: Text('Listar Checklists'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/checklists/list');
+                  Navigator.of(context).pushReplacementNamed('/checklists');
                 },
               ),
               ListTile(
                 leading: Icon(Icons.add),
                 title: Text('Cadastrar Checklist'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/checklists/add');
+                  Navigator.of(context).pushReplacementNamed('/checklists/adicionar');
                 },
               ),
             ],
