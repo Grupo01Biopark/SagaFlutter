@@ -23,29 +23,29 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
       {}; // Armazenará as respostas (1, 2, 3 para Conforme, Médio, Não Conforme)
   Map<int, TextEditingController> textControllers =
       {}; // Armazenará os textos para cada pergunta
-
+  int flag = 0;
   // Função para buscar dados da API
   Future<Map<String, dynamic>> fetchData() async {
     final String apiUrl =
         "http://127.0.0.1:8080/formulario/${widget.empresaId}/iniciar/respostas/${widget.id}";
 
     final response = await http.get(Uri.parse(apiUrl));
-
+    
     if (response.statusCode == 200) {
       final decodedResponse = utf8.decode(response.bodyBytes);
       final jsonResponse = json.decode(decodedResponse);
-
-      // Inicializando os controllers de texto para cada pergunta
-      for (var pergunta in jsonResponse['ambiental']['perguntas']) {
-        textControllers[pergunta['id']] = TextEditingController();
+      if (flag == 0) {
+        for (var pergunta in jsonResponse['ambiental']['perguntas']) {
+          textControllers[pergunta['id']] = TextEditingController();
+        }
+        for (var pergunta in jsonResponse['social']['perguntas']) {
+          textControllers[pergunta['id']] = TextEditingController();
+        }
+        for (var pergunta in jsonResponse['governanca']['perguntas']) {
+          textControllers[pergunta['id']] = TextEditingController();
+        }
+        flag = 1;
       }
-      for (var pergunta in jsonResponse['social']['perguntas']) {
-        textControllers[pergunta['id']] = TextEditingController();
-      }
-      for (var pergunta in jsonResponse['governanca']['perguntas']) {
-        textControllers[pergunta['id']] = TextEditingController();
-      }
-
       return jsonResponse;
     } else {
       throw Exception('Falha ao carregar dados');
@@ -170,6 +170,8 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
     final perguntasGovernanca = responseData['governanca']['perguntas'];
 
     for (var pergunta in perguntasAmbiental) {
+      print(pergunta);
+      print(textControllers[pergunta['id']]);
       responsesByAxis['respostasAmb']?.add({
         'idPergunta': pergunta['id'].toString(),
         'conformidade': responses[pergunta['id']] ?? '',
@@ -186,7 +188,7 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
     }
 
     for (var pergunta in perguntasGovernanca) {
-      
+      print(textControllers[pergunta['id']]?.text);
       responsesByAxis['respostasGov']?.add({
         'idPergunta': pergunta['id'].toString(),
         'conformidade': responses[pergunta['id']] ?? '',
@@ -246,15 +248,15 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
         );
 
         Future.delayed(Duration(seconds: 2), () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainScaffold(
-                body: FormularioPage(),
-                title: 'Formulários',
-              ),
-            ),
-          );
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => MainScaffold(
+          //       body: FormularioPage(),
+          //       title: 'Formulários',
+          //     ),
+          //   ),
+          // );
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

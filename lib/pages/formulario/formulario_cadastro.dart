@@ -5,6 +5,9 @@ import 'dart:convert';
 class ApiFormularioListService {
   final String apiUrl = "http://127.0.0.1:8080/formulario";
   final String apiAdicionarUrl = "http://127.0.0.1:8080/formulario/adicionar";
+  
+  // Novo endpoint para perguntas
+  final String perguntasUrl = "http://127.0.0.1:8080/checklists";
 
   Future<Map<String, dynamic>> fetchData() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -27,6 +30,19 @@ class ApiFormularioListService {
       throw Exception('Erro ao adicionar formulário');
     }
   }
+
+  // Função para buscar as perguntas do checklist
+  Future<List<dynamic>> fetchPerguntas(String checklistId) async {
+    final response = await http.get(Uri.parse('$perguntasUrl/$checklistId/perguntas'));
+    if (response.statusCode == 200) {
+      var utf8Response = utf8.decode(response.bodyBytes);
+      var decodedData = json.decode(utf8Response);
+
+      return decodedData;
+    } else {
+      throw Exception('Erro ao buscar perguntas');
+    }
+  }
 }
 
 class FormularioCadastroPage extends StatefulWidget {
@@ -37,7 +53,6 @@ class FormularioCadastroPage extends StatefulWidget {
 class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
   final ApiFormularioListService apiService = ApiFormularioListService();
 
-  // Variáveis para armazenar os valores dos inputs
   String? selectedGovernanca;
   String? selectedSocial;
   String? selectedAmbiental;
@@ -68,13 +83,20 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
   }
 
   Future<void> _cadastrarFormulario() async {
-    if (titulo != null && descricao != null && selectedGovernanca != null && selectedSocial != null && selectedAmbiental != null) {
+    if (titulo != null &&
+        descricao != null &&
+        selectedGovernanca != null &&
+        selectedSocial != null &&
+        selectedAmbiental != null) {
       Map<String, dynamic> formularioData = {
         "titulo": titulo,
         "descricao": descricao,
-        "governancaChecklist": governancaChecklists.firstWhere((item) => item['titulo'] == selectedGovernanca)['id'],
-        "socialChecklist": socialChecklists.firstWhere((item) => item['titulo'] == selectedSocial)['id'],
-        "ambientalChecklist": ambientalChecklists.firstWhere((item) => item['titulo'] == selectedAmbiental)['id'],
+        "governancaChecklist": governancaChecklists
+            .firstWhere((item) => item['titulo'] == selectedGovernanca)['id'],
+        "socialChecklist": socialChecklists
+            .firstWhere((item) => item['titulo'] == selectedSocial)['id'],
+        "ambientalChecklist": ambientalChecklists
+            .firstWhere((item) => item['titulo'] == selectedAmbiental)['id'],
       };
 
       try {
@@ -83,16 +105,56 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
           SnackBar(
             content: Text(
               'Formulário cadastrado com sucesso',
-              style: TextStyle(color: Colors.white), // Altere a cor do texto aqui
+              style: TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.green,
           ),
         );
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao cadastrar formulário')));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Erro ao cadastrar formulário')));
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Preencha todos os campos')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Preencha todos os campos')));
+    }
+  }
+
+  // Função para exibir as perguntas em um modal
+  Future<void> _showPerguntasModal(String checklistId) async {
+    try {
+      List<dynamic> perguntas = await apiService.fetchPerguntas(checklistId);
+      
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Perguntas do Checklist'),
+            content: perguntas.isNotEmpty
+                ? SingleChildScrollView(
+                    child: ListBody(
+                      children: perguntas.map((pergunta) {
+                        return ListTile(
+                          title: Text(pergunta[0]), // Título da pergunta
+                          subtitle: Text('Descrição:${pergunta[1]} Categoria: ${pergunta[2]}, Setor: ${pergunta[3]}, Porte: ${pergunta[4]}'),
+                        );
+                      }).toList(),
+                    ),
+                  )
+                : Text('Nenhuma pergunta encontrada.'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Fechar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      print('Erro ao buscar perguntas: $e');
     }
   }
 
@@ -108,8 +170,8 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Input de Título
-            Text('Título', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text('Título',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             TextFormField(
               onChanged: (value) {
                 setState(() {
@@ -122,9 +184,8 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
               ),
             ),
             SizedBox(height: 16),
-
-            // Input de Descrição
-            Text('Descrição', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text('Descrição',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             TextFormField(
               onChanged: (value) {
                 setState(() {
@@ -137,9 +198,8 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
               ),
             ),
             SizedBox(height: 16),
-
-            // Dropdown de Governança
-            Text('Governança', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text('Governança',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             _buildDropdownWithButton(
               title: 'Governança Checklist',
               items: governancaChecklists,
@@ -151,9 +211,8 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
               },
             ),
             SizedBox(height: 16),
-
-            // Dropdown de Social
-            Text('Social', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text('Social',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             _buildDropdownWithButton(
               title: 'Social Checklist',
               items: socialChecklists,
@@ -165,9 +224,8 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
               },
             ),
             SizedBox(height: 16),
-
-            // Dropdown de Ambiental
-            Text('Ambiental', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text('Ambiental',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             _buildDropdownWithButton(
               title: 'Ambiental Checklist',
               items: ambientalChecklists,
@@ -179,24 +237,24 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
               },
             ),
             SizedBox(height: 32),
-
-            // Botão de Cadastrar
-            Center(
+            SizedBox(
+              width: double.infinity,
               child: ElevatedButton(
                 onPressed: _cadastrarFormulario,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF0F6FC6),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 24, vertical: 22),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                 ),
                 child: Text(
                   'Cadastrar',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -218,7 +276,7 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
             value: selectedValue,
             items: items.map<DropdownMenuItem<String>>((item) {
               return DropdownMenuItem<String>(
-                value: item['titulo'],
+                value: item['id'].toString(),
                 child: Text(item['titulo']),
               );
             }).toList(),
@@ -231,7 +289,12 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
         ),
         SizedBox(width: 8),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: selectedValue != null
+              ? () {
+                  // Exibir modal com as perguntas do checklist selecionado
+                  _showPerguntasModal(selectedValue!);
+                }
+              : null, // Desabilita o botão se nenhum checklist estiver selecionado
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(0xFF0F6FC6),
             shape: RoundedRectangleBorder(
