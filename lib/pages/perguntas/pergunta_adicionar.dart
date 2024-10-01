@@ -2,84 +2,84 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class AddEmpresaPage extends StatefulWidget {
+
+class AddPerguntaPage extends StatefulWidget {
   @override
-  _AddEmpresaPageState createState() => _AddEmpresaPageState();
+  _AddPerguntaPageState createState() => _AddPerguntaPageState();
 }
 
-class _AddEmpresaPageState extends State<AddEmpresaPage> {
+class _AddPerguntaPageState extends State<AddPerguntaPage> {
   final _formKey = GlobalKey<FormState>();
 
   // Controladores para os campos de texto
-  final TextEditingController _nomeFantasiaController = TextEditingController();
-  final TextEditingController _cnpjController = TextEditingController();
-  final TextEditingController _razaoSocialController = TextEditingController();
-  final TextEditingController _logradouroController = TextEditingController();
-  final TextEditingController _numeroController = TextEditingController();
-  final TextEditingController _cepController = TextEditingController();
-  final TextEditingController _complementoController = TextEditingController();
+  final TextEditingController _tituloController = TextEditingController();
+  final TextEditingController _descricaoController = TextEditingController();
+  bool _importante = false; // Campo booleano para a importância da pergunta
 
+  String _selectedEixo = ""; // Variável para armazenar a seleção de Eixo
   String _selectedPorte = ""; // Variável para armazenar a seleção de Porte
   String _selectedSetor = ""; // Variável para armazenar a seleção de Setor
 
+  List<dynamic> eixos = [];
   List<dynamic> portes = [];
   List<dynamic> setores = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchPortesSetores();
+    _fetchEixosPortesSetores();
   }
 
-  Future<void> _fetchPortesSetores() async {
+  Future<void> _fetchEixosPortesSetores() async {
     final response =
-        await http.get(Uri.parse("http://127.0.0.1:8080/empresas/listar"));
+        await http.get(Uri.parse("http://127.0.0.1:8080/perguntas/listar"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);
         var decodedData = json.decode(utf8Response);
+        eixos = decodedData['eixos'];
         portes = decodedData['portes'];
         setores = decodedData['setores'];
       });
     } else {
-      throw Exception('Falha ao carregar portes');
+      throw Exception('Falha ao carregar eixos, portes e setores');
     }
   }
 
-  Future<void> _addEmpresa() async {
+  Future<void> _addPergunta() async {
     if (_formKey.currentState!.validate()) {
-      final apiUrl = "http://127.0.0.1:8080/empresas/adicionar";
+      final apiUrl = "http://127.0.0.1:8080/perguntas/adicionar";
 
-      Map<String, dynamic> empresaData = {
-        "nomeFantasia": _nomeFantasiaController.text,
-        "cnpj": _cnpjController.text,
-        "razaoSocial": _razaoSocialController.text,
-        "logradouro": _logradouroController.text,
-        "numero": _numeroController.text,
-        "cep": _cepController.text,
-        "complemento": _complementoController.text,
+      Map<String, dynamic> perguntaData = {
+        "titulo": _tituloController.text,
+        "descricao": _descricaoController.text,
+        "importante": _importante ? 1 : 0,
+        "ativa":1,
+        "eixo": {
+          "titulo": _selectedEixo,
+        },
         "porte": {
-          "id": int.parse(_selectedPorte),
+          "titulo": _selectedPorte,
         },
         "setor": {
-          "id": int.parse(_selectedSetor),
+          "titulo": _selectedSetor,
         }
       };
 
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {"Content-Type": "application/json"},
-        body: json.encode(empresaData),
+        body: json.encode(perguntaData),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Empresa adicionada com sucesso!')),
+          SnackBar(content: Text('Pergunta adicionada com sucesso!')),
         );
-        Navigator.of(context).pushReplacementNamed('/empresa');
+        Navigator.of(context).pushReplacementNamed('/pergunta');
       } else {
         var responseJson = json.decode(response.body);
-        print(responseJson);
+        
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(responseJson['error'])),
         );
@@ -91,7 +91,7 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Adicionar Empresa'),
+        title: Text('Adicionar Pergunta'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -100,99 +100,86 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
           child: ListView(
             children: [
               TextFormField(
-                controller: _nomeFantasiaController,
+                controller: _tituloController,
                 decoration: InputDecoration(
-                    labelText: 'Nome Fantasia', border: OutlineInputBorder()),
+                    labelText: 'Título', border: OutlineInputBorder()),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o nome fantasia';
+                    return 'Por favor, insira o título';
                   }
                   return null;
                 },
               ),
               SizedBox(height: 16),
               TextFormField(
-                controller: _cnpjController,
+                controller: _descricaoController,
                 decoration: InputDecoration(
-                    labelText: 'CNPJ', border: OutlineInputBorder()),
+                    labelText: 'Descrição', border: OutlineInputBorder()),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o CNPJ';
+                    return 'Por favor, insira a descrição';
                   }
                   return null;
                 },
               ),
+              // SizedBox(height: 16),
+              // SwitchListTile(
+              //   title: Text('Importante'),
+              //   value: _importante,
+              //   onChanged: (bool value) {
+              //     setState(() {
+              //       _importante = value;
+              //     });
+              //   },
+              // ),
               SizedBox(height: 16),
-              TextFormField(
-                controller: _razaoSocialController,
+              DropdownButtonFormField<String>(
+                value:
+                    null, // Agora estamos usando _selectedEixo como o valor inicial
                 decoration: InputDecoration(
-                    labelText: 'Razão Social', border: OutlineInputBorder()),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira a razão social';
-                  }
-                  return null;
+                  labelText: 'Eixo',
+                  border: OutlineInputBorder(),
+                ),
+                items: eixos.map<DropdownMenuItem<String>>((dynamic eixo) {
+                  return DropdownMenuItem<String>(
+                    value: eixo['titulo'], // O valor que será enviado (ID)
+                    child: Text(eixo['titulo']), // O texto que será exibido
+                  );
+                }).toList(),
+                onChanged: (String? value) {
+                  setState(() {
+                    _selectedEixo = value
+                        .toString(); // Atualiza a variável com o ID selecionado
+                  });
                 },
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                controller: _logradouroController,
-                decoration: InputDecoration(
-                    labelText: 'Logradouro', border: OutlineInputBorder()),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o logradouro';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                controller: _numeroController,
-                decoration: InputDecoration(
-                    labelText: 'Número', border: OutlineInputBorder()),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o número';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                controller: _cepController,
-                decoration: InputDecoration(
-                    labelText: 'CEP', border: OutlineInputBorder()),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o CEP';
+                    return 'Por favor, selecione o eixo da pergunta';
                   }
                   return null;
                 },
               ),
               SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: null, // Agora estamos usando _selectedPorte como o valor inicial
+                value: null,
                 decoration: InputDecoration(
                   labelText: 'Porte',
-                  border:
-                      OutlineInputBorder(), // Mesmo padrão dos TextFormFields
+                  border: OutlineInputBorder(),
                 ),
                 items: portes.map<DropdownMenuItem<String>>((dynamic porte) {
                   return DropdownMenuItem<String>(
-                    value: '${porte['id'].toString()}', // O valor que será enviado (ID)
+                    value: porte['titulo'],
                     child: Text(porte['titulo']), // O texto que será exibido
                   );
                 }).toList(),
                 onChanged: (String? value) {
                   setState(() {
-                    _selectedPorte = value
-                        .toString(); // Atualiza a variável com o ID selecionado
+                    _selectedPorte = value.toString(); // Atualiza a seleção
                   });
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, selecione o porte da empresa';
+                    return 'Por favor, selecione o porte da pergunta';
                   }
                   return null;
                 },
@@ -202,12 +189,11 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
                 value: null,
                 decoration: InputDecoration(
                   labelText: 'Setor',
-                  border:
-                      OutlineInputBorder(), // Mesmo padrão dos TextFormFields
+                  border: OutlineInputBorder(),
                 ),
                 items: setores.map<DropdownMenuItem<String>>((dynamic setor) {
                   return DropdownMenuItem<String>(
-                    value: '${setor['id'].toString()}', // O valor que será enviado
+                    value: setor['titulo'], // O valor que será enviado
                     child: Text(setor['titulo']), // O texto que será exibido
                   );
                 }).toList(),
@@ -218,16 +204,16 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, selecione o setor da empresa';
+                    return 'Por favor, selecione o setor da pergunta';
                   }
                   return null;
                 },
               ),
               SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _addEmpresa,
+                onPressed: _addPergunta,
                 child: Text(
-                  'Adicionar Empresa',
+                  'Adicionar Pergunta',
                   style: TextStyle(
                     color: Colors.white, // Define o texto branco
                     fontSize: 20, // Tamanho da fonte opcional
@@ -235,7 +221,6 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF0F6FC6),
-                  // Cor do texto quando pressionado
                   padding: EdgeInsets.symmetric(
                       horizontal: 24, vertical: 22), // Padding do botão
                   shape: RoundedRectangleBorder(
@@ -254,7 +239,7 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
 
 void main() {
   runApp(MaterialApp(
-    home: AddEmpresaPage(),
+    home: AddPerguntaPage(),
     theme: ThemeData(
       primarySwatch: Colors.blueGrey,
       visualDensity: VisualDensity.adaptivePlatformDensity,

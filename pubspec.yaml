@@ -28,9 +28,11 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  path_provider: ^2.0.11
   flutter:
     sdk: flutter
 
+  syncfusion_flutter_charts: ^27.1.50
   provider: ^6.0.1
   http: ^0.13.3
 

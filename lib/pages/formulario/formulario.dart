@@ -11,7 +11,8 @@ class ApiFormularioListService {
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      final decodedResponse = utf8.decode(response.bodyBytes);
+      return json.decode(decodedResponse);
     } else {
       throw Exception('Falha ao carregar dados');
     }
@@ -44,6 +45,10 @@ class FormularioPage extends StatelessWidget {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   var item = snapshot.data![index];
+                  var tags = [
+                  item['checklists']['setor'],
+                  item['checklists']['porte']
+                  ]; 
                   return Card(
                     elevation: 5,
                     shape: RoundedRectangleBorder(
@@ -70,9 +75,23 @@ class FormularioPage extends StatelessWidget {
                           ),
                           SizedBox(height: 8),
                           // Espaço para tags
-                          Text(
-                            'Tags aqui', // Substituir com tags quando disponível
-                            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+// Espaço para tags
+                          Wrap(
+                            spacing: 8.0,
+                            runSpacing: 4.0,
+                            children: tags.map<Widget>((tag) {
+                              return Container(
+                                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.blueGrey[100],
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Text(
+                                  tag,
+                                  style: TextStyle(fontSize: 12, color: Colors.blueGrey[800]),
+                                ),
+                              );
+                            }).toList(),
                           ),
                           SizedBox(height: 8),
                           // Botões de ação
@@ -86,7 +105,7 @@ class FormularioPage extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => FormularioIniciarPage(),
+                                      builder: (context) => FormularioIniciarPage(id: item['id'].toString()),
                                     ),
                                   );
                                 },
