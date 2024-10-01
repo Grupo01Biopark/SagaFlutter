@@ -24,7 +24,8 @@ class _EditChecklistPage extends State<EditChecklistPage> {
   }
 
   Future<void> _fetchChecklist() async {
-    final response = await http.get(Uri.parse("http://127.0.0.1:8080/checklists/editar/${widget.checklistId}"));
+    final response = await http.get(Uri.parse(
+        "http://127.0.0.1:8080/checklists/editar/${widget.checklistId}"));
     if (response.statusCode == 200) {
       var utf8Response = utf8.decode(response.bodyBytes);
       var checklistData = json.decode(utf8Response);
@@ -50,7 +51,8 @@ class _EditChecklistPage extends State<EditChecklistPage> {
 
     try {
       final response = await http.put(
-        Uri.parse('http://127.0.0.1:8080/checklists/editar/${widget.checklistId}'),
+        Uri.parse(
+            'http://127.0.0.1:8080/checklists/editar/${widget.checklistId}'),
         headers: {"Content-Type": "application/json"},
         body: json.encode(checklistData),
       );
@@ -81,7 +83,8 @@ class _EditChecklistPage extends State<EditChecklistPage> {
             children: [
               TextFormField(
                 controller: _tituloController,
-                decoration: InputDecoration(labelText: 'Título', border: OutlineInputBorder()),
+                decoration: InputDecoration(
+                    labelText: 'Título', border: OutlineInputBorder()),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira o título';
@@ -92,7 +95,8 @@ class _EditChecklistPage extends State<EditChecklistPage> {
               SizedBox(height: 16),
               TextFormField(
                 controller: _descricaoController,
-                decoration: InputDecoration(labelText: 'Descrição', border: OutlineInputBorder()),
+                decoration: InputDecoration(
+                    labelText: 'Descrição', border: OutlineInputBorder()),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira a descrição';
@@ -104,6 +108,13 @@ class _EditChecklistPage extends State<EditChecklistPage> {
               ElevatedButton(
                 onPressed: _saveChecklist,
                 child: Text('Salvar Alterações'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF0F6FC6),
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 22),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
               ),
             ],
           ),
