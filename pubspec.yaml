@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  syncfusion_flutter_charts: ^27.1.50
   provider: ^6.0.1
   http: ^0.13.3
   image_picker: ^0.8.4+4
