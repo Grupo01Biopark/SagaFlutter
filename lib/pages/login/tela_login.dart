@@ -43,11 +43,20 @@ class _LoginPageState extends State<LoginPage> {
         final userData = jsonDecode(response.body);
         final user = UserModel.fromJson(userData);
 
-        // Armazene os dados do usuário no provider
+        final Map<String, dynamic> responseBody = json.decode(response.body);
+
+       
+        final bool tagAlterarSenha = responseBody['tagAlterarSenha'];
+
+        if (tagAlterarSenha == true) {
+          print("bora setar a senha");
+        }else{
+        
         Provider.of<UserProvider>(context, listen: false).setUser(user);
 
-        // Login bem-sucedido
         Navigator.of(context).pushReplacementNamed('/dashboard');
+      }
+
       } catch (e) {
         // Se a resposta não for JSON, trate-a como texto simples
         if (response.body == "Login successful!") {
