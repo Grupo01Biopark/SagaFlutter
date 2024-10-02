@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:saga_flutter_app/pages/user/user_model.dart';
@@ -115,10 +116,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const Center(
                     child: Text(
-                      "Entrar",
+                      "ENTRAR",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        // fontFamily: ,
                         fontSize: 28,
+                        letterSpacing: 1.0,
                         color: Colors.black,
                       ),
                     ),
@@ -172,8 +175,11 @@ class _LoginPageState extends State<LoginPage> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       child: const Text(
-                        "Recuperar Senha",
+                        "Esqueci a senha",
                         textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 54, 181, 255),
+                        ),
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -228,6 +234,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: const Text(
                         "Cadastre-se",
                         textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 54, 181, 255),
+                        ),
                       ),
                       onPressed: () {
                         Navigator.push(
