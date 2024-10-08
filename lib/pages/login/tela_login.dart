@@ -39,35 +39,36 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     if (response.statusCode == 200) {
-      try {
-        // Tente analisar a resposta como JSON
-        final userData = jsonDecode(response.body);
-        final user = UserModel.fromJson(userData);
+      Navigator.of(context).pushReplacementNamed('/dashboard');
+      // try {
+      //   // Tente analisar a resposta como JSON
+      //   final userData = jsonDecode(response.body);
+      //   final user = UserModel.fromJson(userData);
 
-        final Map<String, dynamic> responseBody = json.decode(response.body);
+      //   final Map<String, dynamic> responseBody = json.decode(response.body);
 
        
-        final bool tagAlterarSenha = responseBody['tagAlterarSenha'];
+      //   final bool tagAlterarSenha = responseBody['tagAlterarSenha'];
 
-        if (tagAlterarSenha == true) {
-          print("bora setar a senha");
-        }else{
+      //   if (tagAlterarSenha == true) {
+      //     print("bora setar a senha");
+      //   }else{
         
-        Provider.of<UserProvider>(context, listen: false).setUser(user);
+      //   Provider.of<UserProvider>(context, listen: false).setUser(user);
 
-        Navigator.of(context).pushReplacementNamed('/dashboard');
-      }
+      //   Navigator.of(context).pushReplacementNamed('/dashboard');
+      // }
 
-      } catch (e) {
-        // Se a resposta não for JSON, trate-a como texto simples
-        if (response.body == "Login successful!") {
-          // Login bem-sucedido, mas sem dados do usuário
-          Navigator.of(context).pushReplacementNamed('/dashboard');
-        } else {
-          // Exibir mensagem de erro
-          showErrorDialog("Resposta inesperada da API.");
-        }
-      }
+      // } catch (e) {
+      //   // Se a resposta não for JSON, trate-a como texto simples
+      //   if (response.body == "Login successful!") {
+      //     // Login bem-sucedido, mas sem dados do usuário
+      //     Navigator.of(context).pushReplacementNamed('/dashboard');
+      //   } else {
+      //     // Exibir mensagem de erro
+      //     showErrorDialog("Resposta inesperada da API.");
+      //   }
+      // }
     } else {
       // Login falhou, exibir mensagem de erro
       showErrorDialog("Email ou senha inválidos. Tente novamente.");

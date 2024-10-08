@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:html' as html;
+//import 'dart:html' as html;
 import 'dart:typed_data';
 
 import 'package:saga_flutter_app/pages/formulario/formulario_respostas.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario_visualizar_resp.dart';
 
-void downloadFileFromBase64(String base64Data, String fileName) {
-  final bytes = base64.decode(base64Data);
-  final blob = html.Blob([Uint8List.fromList(bytes)]);
-  final url = html.Url.createObjectUrlFromBlob(blob);
-  final anchor = html.AnchorElement(href: url)
-    ..setAttribute('download', fileName)
-    ..click();
-  html.Url.revokeObjectUrl(url);
-}
+// void downloadFileFromBase64(String base64Data, String fileName) {
+//   final bytes = base64.decode(base64Data);
+//   final blob = html.Blob([Uint8List.fromList(bytes)]);
+//   final url = html.Url.createObjectUrlFromBlob(blob);
+//   final anchor = html.AnchorElement(href: url)
+//     ..setAttribute('download', fileName)
+//     ..click();
+//   html.Url.revokeObjectUrl(url);
+// }
 
 class ApiCertificadoListService {
   final String apiUrl = "http://127.0.0.1:8080/certificado/listar";
@@ -37,7 +37,7 @@ class ApiCertificadoListService {
 
     if (response.statusCode == 200) {
       final base64Data = base64.encode(response.bodyBytes);
-      downloadFileFromBase64(base64Data, "certificado_$id.pdf");
+      // downloadFileFromBase64(base64Data, "certificado_$id.pdf");
     } else {
       throw Exception('Falha ao baixar certificado');
     }
