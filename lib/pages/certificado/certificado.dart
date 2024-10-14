@@ -3,6 +3,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 //import 'dart:html' as html;
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:saga_flutter_app/pages/formulario/formulario_respostas.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario_visualizar_resp.dart';
@@ -32,12 +39,20 @@ class ApiCertificadoListService {
   }
 
   Future<void> downloadCertificado(int id) async {
-    final response = await http
-        .get(Uri.parse("http://127.0.0.1:8080/certificado/$id/emitir"));
+    final response = await http.get(Uri.parse("http://127.0.0.1:8080/certificado/$id/emitir"));
 
     if (response.statusCode == 200) {
-      final base64Data = base64.encode(response.bodyBytes);
-      // downloadFileFromBase64(base64Data, "certificado_$id.pdf");
+      // Salvar o arquivo temporariamente antes de compartilhar
+      final bytes = response.bodyBytes;
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/certificado_$id.pdf');
+      await file.writeAsBytes(bytes);
+
+      // Criar um XFile para o compartilhamento
+      final xFile = XFile(file.path);
+      
+      // Compartilhar o arquivo
+      await Share.shareXFiles([xFile]);
     } else {
       throw Exception('Falha ao baixar certificado');
     }
