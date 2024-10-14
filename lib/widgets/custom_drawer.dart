@@ -101,7 +101,8 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.add),
                 title: Text('Cadastrar Checklist'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/checklists/adicionar');
+                  Navigator.of(context)
+                      .pushReplacementNamed('/checklists/adicionar');
                 },
               ),
             ],
@@ -134,6 +135,26 @@ class CustomDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pushReplacementNamed('/certificado');
             },
+          ),
+          ExpansionTile(
+            leading: Icon(Icons.supervised_user_circle),
+            title: Text('Usuarios'),
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.list),
+                title: Text('Usuarios'),
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed('/usuario');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.add),
+                title: Text('Cadastrar Usuarios'),
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed('/usuario/cadastro');
+                },
+              ),
+            ],
           ),
         ],
       ),

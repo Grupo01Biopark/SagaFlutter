@@ -107,7 +107,11 @@ class _EditChecklistPage extends State<EditChecklistPage> {
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _saveChecklist,
-                child: Text('Salvar Alterações'),
+                child: Text('Editar Checklist',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    )),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF0F6FC6),
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 22),

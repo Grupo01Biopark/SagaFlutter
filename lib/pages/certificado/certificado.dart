@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:html' as html;
+//import 'dart:html' as html;
 import 'dart:typed_data';
 
 import 'package:saga_flutter_app/pages/formulario/formulario_respostas.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario_visualizar_resp.dart';
 
-void downloadFileFromBase64(String base64Data, String fileName) {
-  final bytes = base64.decode(base64Data);
-  final blob = html.Blob([Uint8List.fromList(bytes)]);
-  final url = html.Url.createObjectUrlFromBlob(blob);
-  final anchor = html.AnchorElement(href: url)
-    ..setAttribute('download', fileName)
-    ..click();
-  html.Url.revokeObjectUrl(url);
-}
+// void downloadFileFromBase64(String base64Data, String fileName) {
+//   final bytes = base64.decode(base64Data);
+//   final blob = html.Blob([Uint8List.fromList(bytes)]);
+//   final url = html.Url.createObjectUrlFromBlob(blob);
+//   final anchor = html.AnchorElement(href: url)
+//     ..setAttribute('download', fileName)
+//     ..click();
+//   html.Url.revokeObjectUrl(url);
+// }
 
 class ApiCertificadoListService {
   final String apiUrl = "http://127.0.0.1:8080/certificado/listar";
@@ -37,7 +37,7 @@ class ApiCertificadoListService {
 
     if (response.statusCode == 200) {
       final base64Data = base64.encode(response.bodyBytes);
-      downloadFileFromBase64(base64Data, "certificado_$id.pdf");
+      // downloadFileFromBase64(base64Data, "certificado_$id.pdf");
     } else {
       throw Exception('Falha ao baixar certificado');
     }
@@ -52,7 +52,7 @@ class CertificadoPage extends StatelessWidget {
       case '1':
         return Colors.green;
       case '2':
-        return Colors.yellow;
+        return const Color.fromARGB(255, 171, 155, 10);
       case '3':
         return Colors.red;
       default:
@@ -68,7 +68,7 @@ class CertificadoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-         automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         title: Text('Listagem de Certificados'),
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -117,15 +117,18 @@ class CertificadoPage extends StatelessWidget {
                           ),
                           SizedBox(height: 8),
                           Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment
+                                .spaceEvenly, // Distribui o espaço igualmente
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .center, // Centraliza os elementos verticalmente
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .center, // Centraliza os textos horizontalmente
                                   children: [
-                                    Text('Nota Governança: '),
-                                    SizedBox(
-                                      height: 2,
-                                    ),
+                                    Text('Nota Governança: ', textAlign: TextAlign.center,),
+                                    SizedBox(height: 2),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8, vertical: 4),
@@ -144,24 +147,27 @@ class CertificadoPage extends StatelessWidget {
                                                 ? 'Médio'
                                                 : 'Não conforme',
                                         style: TextStyle(color: Colors.white),
+                                        textAlign: TextAlign
+                                            .center, // Centraliza o texto dentro do container
                                       ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 100,
-                                  width: 1,
-                                  child: ColoredBox(
-                                    color: Colors.grey,
-                                  ),
+                              ),
+                              SizedBox(
+                                height: 100,
+                                width: 1,
+                                child: ColoredBox(
+                                  color: Colors.grey,
                                 ),
-                                Column(
+                              ),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text('Nota Social: '),
-                                    SizedBox(
-                                      height: 2,
-                                    ),
+                                    Text('Nota Social: ',textAlign: TextAlign.center,),
+                                    SizedBox(height: 2),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8, vertical: 4),
@@ -180,24 +186,26 @@ class CertificadoPage extends StatelessWidget {
                                                 ? 'Médio'
                                                 : 'Não conforme',
                                         style: TextStyle(color: Colors.white),
+                                        textAlign: TextAlign.center,
                                       ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 100,
-                                  width: 1,
-                                  child: ColoredBox(
-                                    color: Colors.grey,
-                                  ),
+                              ),
+                              SizedBox(
+                                height: 100,
+                                width: 1,
+                                child: ColoredBox(
+                                  color: Colors.grey,
                                 ),
-                                Column(
+                              ),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text('Nota Ambiental: '),
-                                    SizedBox(
-                                      height: 2,
-                                    ),
+                                    Text('Nota Ambiental: ',textAlign: TextAlign.center,),
+                                    SizedBox(height: 2),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8, vertical: 4),
@@ -216,11 +224,14 @@ class CertificadoPage extends StatelessWidget {
                                                 ? 'Médio'
                                                 : 'Não conforme',
                                         style: TextStyle(color: Colors.white),
+                                        textAlign: TextAlign.center,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ]),
+                              ),
+                            ],
+                          ),
                           SizedBox(height: 8),
                           Row(
                             children: [
@@ -253,40 +264,51 @@ class CertificadoPage extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              if (certificado['status'] ==
-                                  true) // Directly compare status with true
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    try {
-                                      await apiService.downloadCertificado(
-                                          certificado['id']);
-                                    } catch (e) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                              'Erro ao baixar certificado: $e'),
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  child: Text(
-                                    'Baixar Certificado',
-                                    style: TextStyle(color: Color(0xFF0F6FC6)),
+                              if (certificado['status'] == true)
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      try {
+                                        await apiService.downloadCertificado(
+                                            certificado['id']);
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                'Erro ao baixar certificado: $e'),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    child: Text(
+                                      'Baixar Certificado',
+                                      style:
+                                          TextStyle(color: Color(0xFF0F6FC6)),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => FormularioRespostasVisuPage(certId: certificado['id']),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'Visualizar Respostas',
-                                  style: TextStyle(color: Color(0xFF0F6FC6)),
+                              SizedBox(
+                                  width:
+                                      10), // Adiciona espaçamento entre os botões
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            FormularioRespostasVisuPage(
+                                                certId: certificado['id']),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Visualizar Respostas',
+                                    style: TextStyle(color: Color(0xFF0F6FC6)),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
                             ],
