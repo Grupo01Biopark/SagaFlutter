@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:saga_flutter_app/theme/theme_notifier.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
 
 class ApiDashboardService {
   final String apiPorte = "http://127.0.0.1:8080/dashboard/porte";
   final String apiSetor = "http://127.0.0.1:8080/dashboard/setor";
   final String apiTotal = "http://127.0.0.1:8080/dashboard/total";
   final String apiChecklist = "http://127.0.0.1:8080/dashboard/checklist";
-  final String apiEmpresasMes =
-      "http://127.0.0.1:8080/dashboard/mes"; // Nova rota
+  final String apiEmpresasMes = "http://127.0.0.1:8080/dashboard/mes";
 
   Future<Map<String, dynamic>> fetchPorteData() async {
     final response = await http.get(Uri.parse(apiPorte));
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return data;
+      return json.decode(response.body);
     } else {
       throw Exception('Falha ao carregar dados de porte');
     }
@@ -26,8 +26,7 @@ class ApiDashboardService {
     final response = await http.get(Uri.parse(apiSetor));
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return data;
+      return json.decode(response.body);
     } else {
       throw Exception('Falha ao carregar dados de setor');
     }
@@ -58,7 +57,6 @@ class ApiDashboardService {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      // Mapeia os dados para a classe EmpresasMesData
       return (data as List).map((item) {
         return EmpresasMesData(item[0], item[1], item[2]);
       }).toList();
@@ -68,30 +66,12 @@ class ApiDashboardService {
   }
 }
 
-class DashboardPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: DashboardPageState(title: 'Dashboard de Portes e Setores'),
-    );
-  }
-}
-
-class DashboardPageState extends StatefulWidget {
-  DashboardPageState({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
+class DashboardPage extends StatefulWidget {
   @override
   _DashboardPageState createState() => _DashboardPageState();
 }
 
-class _DashboardPageState extends State<DashboardPageState> {
+class _DashboardPageState extends State<DashboardPage> {
   late TooltipBehavior _tooltipBehaviorPorte;
   late TooltipBehavior _tooltipBehaviorSetor;
   late TooltipBehavior _tooltipBehaviorEmpresasMes;
@@ -109,21 +89,15 @@ class _DashboardPageState extends State<DashboardPageState> {
     _tooltipBehaviorSetor = TooltipBehavior(enable: true);
     _tooltipBehaviorEmpresasMes = TooltipBehavior(enable: true);
     _apiService = ApiDashboardService();
-    _porteDataFuture =
-        fetchPorteData(); // Inicializa a busca dos dados de porte
-    _setorDataFuture =
-        fetchSetorData(); // Inicializa a busca dos dados de setor
-    _totalEmpresasFuture =
-        _apiService.fetchTotalEmpresas(); // Busca total de empresas
-    _totalChecklistsFuture =
-        _apiService.fetchTotalChecklists(); // Busca total de checklists
-    _empresasMesFuture =
-        _apiService.fetchEmpresasMes(); // Busca empresas por mês
+    _porteDataFuture = fetchPorteData();
+    _setorDataFuture = fetchSetorData();
+    _totalEmpresasFuture = _apiService.fetchTotalEmpresas();
+    _totalChecklistsFuture = _apiService.fetchTotalChecklists();
+    _empresasMesFuture = _apiService.fetchEmpresasMes();
   }
 
   Future<List<PorteData>> fetchPorteData() async {
     final apiData = await _apiService.fetchPorteData();
-
     return apiData.entries.map((entry) {
       return PorteData(entry.key, entry.value);
     }).toList();
@@ -131,7 +105,6 @@ class _DashboardPageState extends State<DashboardPageState> {
 
   Future<List<SetorData>> fetchSetorData() async {
     final apiData = await _apiService.fetchSetorData();
-
     return apiData.entries.map((entry) {
       return SetorData(entry.key, entry.value);
     }).toList();
@@ -139,12 +112,11 @@ class _DashboardPageState extends State<DashboardPageState> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            body: Column(
-      children: [
-        // Gráfico de Porte
-        Row(
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    return Scaffold(
+      body: Column(
+        children: [
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
@@ -158,7 +130,8 @@ class _DashboardPageState extends State<DashboardPageState> {
                             child: Text(
                                 'Erro ao carregar dados de porte: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: Text('Nenhum dado de porte disponível'));
+                        return Center(
+                            child: Text('Nenhum dado de porte disponível'));
                       }
 
                       return SfCircularChart(
@@ -166,14 +139,17 @@ class _DashboardPageState extends State<DashboardPageState> {
                         legend: Legend(
                             position: LegendPosition.bottom,
                             isVisible: true,
-                            overflowMode: LegendItemOverflowMode.wrap),
+                            overflowMode: LegendItemOverflowMode.wrap,
+                            shouldAlwaysShowScrollbar: true),
                         tooltipBehavior: _tooltipBehaviorPorte,
                         series: <CircularSeries>[
                           PieSeries<PorteData, String>(
                             dataSource: snapshot.data,
                             xValueMapper: (PorteData data, _) => data.porte,
-                            yValueMapper: (PorteData data, _) => data.quantidade,
-                            dataLabelSettings: DataLabelSettings(isVisible: true),
+                            yValueMapper: (PorteData data, _) =>
+                                data.quantidade,
+                            dataLabelSettings:
+                                DataLabelSettings(isVisible: true),
                             enableTooltip: true,
                           ),
                         ],
@@ -192,7 +168,8 @@ class _DashboardPageState extends State<DashboardPageState> {
                             child: Text(
                                 'Erro ao carregar dados de setor: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: Text('Nenhum dado de setor disponível'));
+                        return Center(
+                            child: Text('Nenhum dado de setor disponível'));
                       }
 
                       return SfCircularChart(
@@ -200,14 +177,17 @@ class _DashboardPageState extends State<DashboardPageState> {
                         legend: Legend(
                             position: LegendPosition.bottom,
                             isVisible: true,
-                            overflowMode: LegendItemOverflowMode.wrap),
+                            overflowMode: LegendItemOverflowMode.wrap,
+                            shouldAlwaysShowScrollbar: true),
                         tooltipBehavior: _tooltipBehaviorSetor,
                         series: <CircularSeries>[
                           PieSeries<SetorData, String>(
                             dataSource: snapshot.data,
                             xValueMapper: (SetorData data, _) => data.setor,
-                            yValueMapper: (SetorData data, _) => data.quantidade,
-                            dataLabelSettings: DataLabelSettings(isVisible: true),
+                            yValueMapper: (SetorData data, _) =>
+                                data.quantidade,
+                            dataLabelSettings:
+                                DataLabelSettings(isVisible: true),
                             enableTooltip: true,
                           ),
                         ],
@@ -218,67 +198,70 @@ class _DashboardPageState extends State<DashboardPageState> {
           ),
           SizedBox(height: 20), // Espaçamento extra
           Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            // Card Total de Empresas
-            FutureBuilder<int>(
-                future: _totalEmpresasFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Erro ao carregar total de empresas');
-                  } else {
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Total de Empresas',
-                                style: TextStyle(fontSize: 16)),
-                            SizedBox(height: 8),
-                            Text(snapshot.data.toString(),
-                                style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.bold)),
-                          ],
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // Card Total de Empresas
+              FutureBuilder<int>(
+                  future: _totalEmpresasFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Erro ao carregar total de empresas');
+                    } else {
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Total de Empresas',
+                                  style: TextStyle(fontSize: 16)),
+                              SizedBox(height: 8),
+                              Text(snapshot.data.toString(),
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                }),
-            // Card Total de Checklists
-            FutureBuilder<int>(
-                future: _totalChecklistsFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Erro ao carregar total de checklists');
-                  } else {
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Total de Checklists',
-                                style: TextStyle(fontSize: 16)),
-                            SizedBox(height: 8),
-                            Text(snapshot.data.toString(),
-                                style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.bold)),
-                          ],
+                      );
+                    }
+                  }),
+              // Card Total de Checklists
+              FutureBuilder<int>(
+                  future: _totalChecklistsFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Erro ao carregar total de checklists');
+                    } else {
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Total de Checklists',
+                                  style: TextStyle(fontSize: 16)),
+                              SizedBox(height: 8),
+                              Text(snapshot.data.toString(),
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                }),
-          ],
-        ),
-        SizedBox(height: 20), // Espaçamento extra
-        Expanded(
-          child: FutureBuilder<List<EmpresasMesData>>(
+                      );
+                    }
+                  }),
+            ],
+          ),
+          SizedBox(height: 20),
+          // Gráfico de Empresas por Mês
+          Expanded(
+            child: FutureBuilder<List<EmpresasMesData>>(
               future: _empresasMesFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -294,51 +277,49 @@ class _DashboardPageState extends State<DashboardPageState> {
                 }
 
                 return SfCartesianChart(
-                  title: ChartTitle(text: 'Empresas Cadastradas por Mês'),
-                  legend: Legend(
-                      position: LegendPosition.bottom, // Posiciona a legenda abaixo do gráfico
-                      isVisible: true
-                    ),
-                  tooltipBehavior: _tooltipBehaviorEmpresasMes,
                   primaryXAxis: CategoryAxis(),
+                  title: ChartTitle(text: 'Empresas Cadastradas por Mês'),
+                  tooltipBehavior: _tooltipBehaviorEmpresasMes,
                   series: <CartesianSeries>[
                     ColumnSeries<EmpresasMesData, String>(
-                      // Corrigido para ColumnSeries
                       dataSource: snapshot.data!,
                       xValueMapper: (EmpresasMesData data, _) =>
                           '${data.mes}/${data.ano}',
                       yValueMapper: (EmpresasMesData data, _) =>
                           data.quantidade,
                       dataLabelSettings: DataLabelSettings(isVisible: true),
+                      enableTooltip: true,
                     ),
                   ],
                 );
-              }),
-        ),
-        SizedBox(height: 20), // Espaçamento extra
-      ],
-    )));
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
-// Modelo de dados para o gráfico de Porte
+// Classes de modelo para os dados
 class PorteData {
-  PorteData(this.porte, this.quantidade);
   final String porte;
   final int quantidade;
+
+  PorteData(this.porte, this.quantidade);
 }
 
-// Modelo de dados para o gráfico de Setor
 class SetorData {
-  SetorData(this.setor, this.quantidade);
   final String setor;
   final int quantidade;
+
+  SetorData(this.setor, this.quantidade);
 }
 
-// Modelo de dados para o gráfico de Empresas por Mês
 class EmpresasMesData {
-  EmpresasMesData(this.ano, this.mes, this.quantidade);
   final int ano;
   final int mes;
   final int quantidade;
+
+  EmpresasMesData(this.ano, this.mes, this.quantidade);
 }
