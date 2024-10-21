@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:saga_flutter_app/pages/login/generate_password.dart';
 import 'package:saga_flutter_app/pages/login/tela_login.dart';
 import 'package:http/http.dart' as http;
+import 'package:saga_flutter_app/pages/user/user.dart';
 
 import 'cards.dart';
 
@@ -18,7 +19,8 @@ class RegistrationUser extends StatefulWidget {
 class _RegistrationUserState extends State<RegistrationUser> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _obscureConfirmPassword = true;
 
   void _showDialog(String title, String content, [VoidCallback? onConfirm]) {
@@ -66,19 +68,16 @@ class _RegistrationUserState extends State<RegistrationUser> {
 
       // Processar a resposta do servidor
       if (response.statusCode == 200) {
-        _showDialog('Cadastro Realizado', 'Cadastro realizado com sucesso!', () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginPage(),
-            ),
-          );
+        _showDialog('Cadastro Realizado', 'Cadastro realizado com sucesso!',
+            () {
+          Navigator.of(context).pushReplacementNamed('/usuario');
         });
       } else if (response.statusCode == 400) {
         final responseBody = jsonDecode(response.body);
         _showDialog('Erro', responseBody['message'] ?? 'Erro ao registrar');
       } else {
-        _showDialog('Erro', 'Ocorreu um erro inesperado. Tente novamente.');
+        print(response.body);
+        _showDialog('Erro', response.body);
       }
     }
   }
@@ -146,11 +145,14 @@ class _RegistrationUserState extends State<RegistrationUser> {
                         border: const OutlineInputBorder(),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                            _obscureConfirmPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
                             });
                           },
                         ),
@@ -164,7 +166,21 @@ class _RegistrationUserState extends State<RegistrationUser> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: _validateAndSubmit,
-                            child: const Text('Cadastrar'),
+                            child: const Text(
+                              'Cadastrar',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF0F6FC6),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 22),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 8),

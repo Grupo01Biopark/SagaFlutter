@@ -70,7 +70,9 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
         _numeroController.text = empresaData['empresas']['numero'];
         _cepController.text = empresaData['empresas']['cep'];
         _complementoController.text = empresaData['empresas']['complemento'];
-        _emailController.text = empresaData['empresas']['email'] != null? empresaData['empresas']['email']:" ";
+        _emailController.text = empresaData['empresas']['email'] != null
+            ? empresaData['empresas']['email']
+            : " ";
         _selectedPorte = empresaData['empresas']['porte']['id'].toString();
         _selectedSetor = empresaData['empresas']['setor']['id'].toString();
       });
@@ -272,7 +274,18 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _saveEmpresa,
-                child: Text('Salvar'),
+                child: Text('Editar Empresa',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    )),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF0F6FC6),
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 22),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
               ),
             ],
           ),

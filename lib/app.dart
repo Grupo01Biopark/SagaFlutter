@@ -9,9 +9,11 @@ import 'package:saga_flutter_app/pages/empresa/empresa_adicionar.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario_cadastro.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario_iniciar.dart';
+import 'package:saga_flutter_app/pages/login/tela_cadastro_user.dart';
 import 'package:saga_flutter_app/pages/login/tela_login.dart';
 import 'package:saga_flutter_app/pages/perguntas/pergunta.dart';
 import 'package:saga_flutter_app/pages/perguntas/pergunta_adicionar.dart';
+import 'package:saga_flutter_app/pages/user/user.dart';
 import 'package:saga_flutter_app/widgets/custom_scroll_behavior.dart';
 import 'widgets/main_scaffold.dart';
 import 'theme/theme_notifier.dart';
@@ -46,9 +48,9 @@ class MyApp extends StatelessWidget {
                   title: 'Empresa',
                 ),
             '/empresa/adicionar': (context) => MainScaffold(
-              body: AddEmpresaPage(),
-              title: 'Empresa',
-            ),
+                  body: AddEmpresaPage(),
+                  title: 'Empresa',
+                ),
             '/checklists': (context) => MainScaffold(
                   body: ChecklistPage(),
                   title: 'Checklists',
@@ -68,9 +70,16 @@ class MyApp extends StatelessWidget {
             '/certificado': (context) => MainScaffold(
                   body: CertificadoPage(),
                   title: "Certificados",
+                ),
+            '/usuario': (context) => MainScaffold(
+                  body: UsuarioPage(),
+                  title: "Usuarios",
+                ),
+            '/usuario/cadastro': (context) => MainScaffold(
+                  body: RegistrationUser(),
+                  title: "Usuarios",
                 )
           },
-
         );
       },
     );
