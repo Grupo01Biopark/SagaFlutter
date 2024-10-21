@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:saga_flutter_app/pages/user/user_model.dart';
 import 'package:saga_flutter_app/pages/user/user_provider.dart';
 import 'cards.dart';
+import 'tela_redefinir_senha_login.dart';
 import 'tela_resetar_senha.dart';
 import 'tela_cadastro_user.dart';
 
@@ -46,27 +47,23 @@ class _LoginPageState extends State<LoginPage> {
 
         final Map<String, dynamic> responseBody = json.decode(response.body);
 
-       
-        final bool tagAlterarSenha = responseBody['tagAlterarSenha'];
 
-        if (tagAlterarSenha == true) {
-          print("bora setar a senha");
-        }else{
-        
-        Provider.of<UserProvider>(context, listen: false).setUser(user);
-
+      if(responseBody['tagAlterarSenha'] == 'true'){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResetLoginPasswordPage(email: emailController.text),
+          ),
+        );
+      }else{
         Navigator.of(context).pushReplacementNamed('/dashboard');
+        Provider.of<UserProvider>(context, listen: false).setUser(user);
       }
 
+      
+
       } catch (e) {
-        // Se a resposta não for JSON, trate-a como texto simples
-        if (response.body == "Login successful!") {
-          // Login bem-sucedido, mas sem dados do usuário
-          Navigator.of(context).pushReplacementNamed('/dashboard');
-        } else {
-          // Exibir mensagem de erro
-          showErrorDialog("Resposta inesperada da API.");
-        }
+          showErrorDialog("Erro! Contate um suporte.");
       }
     } else {
       // Login falhou, exibir mensagem de erro
