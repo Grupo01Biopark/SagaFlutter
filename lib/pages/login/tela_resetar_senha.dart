@@ -158,7 +158,9 @@ class ResetPasswordPage extends StatelessWidget {
                         sendPasswordResetRequest(emailController.text);
                       }
                     },
-                    child: const Text("Solicitar E-mail"),
+                    child: const Text("Solicitar E-mail",
+                        style: TextStyle(color: Color(0xFF0F6FC6))
+                    ),
                   ),
                 ],
               ),

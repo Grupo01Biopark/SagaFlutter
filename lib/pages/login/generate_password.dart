@@ -22,7 +22,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
     _focusNode.addListener(() {
       setState(() {
         tooltipMessage =
-            _focusNode.hasFocus ? 'Digite uma Senha' : 'Gere nova Senha';
+            _focusNode.hasFocus ? 'Digite uma Senha' : 'Digite uma Senha';
       });
     });
   }
