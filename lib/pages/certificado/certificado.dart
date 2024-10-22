@@ -13,7 +13,7 @@ import 'package:share_plus/share_plus.dart';
 
 import 'package:saga_flutter_app/pages/formulario/formulario_respostas.dart';
 import 'package:saga_flutter_app/pages/formulario/formulario_visualizar_resp.dart';
-
+import 'package:saga_flutter_app/widgets/MapDialog.dart';
 // void downloadFileFromBase64(String base64Data, String fileName) {
 //   final bytes = base64.decode(base64Data);
 //   final blob = html.Blob([Uint8List.fromList(bytes)]);
@@ -39,7 +39,8 @@ class ApiCertificadoListService {
   }
 
   Future<void> downloadCertificado(int id) async {
-    final response = await http.get(Uri.parse("http://127.0.0.1:8080/certificado/$id/emitir"));
+    final response = await http
+        .get(Uri.parse("http://127.0.0.1:8080/certificado/$id/emitir"));
 
     if (response.statusCode == 200) {
       // Salvar o arquivo temporariamente antes de compartilhar
@@ -50,7 +51,7 @@ class ApiCertificadoListService {
 
       // Criar um XFile para o compartilhamento
       final xFile = XFile(file.path);
-      
+
       // Compartilhar o arquivo
       await Share.shareXFiles([xFile]);
     } else {
@@ -127,6 +128,63 @@ class CertificadoPage extends StatelessWidget {
                           ),
                           SizedBox(height: 8),
                           Text(
+                            'Latitude: ${certificado['latitude'] ?? ''}',
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            'Longitude: ${certificado['longitude'] ?? ''}',
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              final latitude = certificado['latitude'];
+                              final longitude = certificado['longitude'];
+
+                              if (latitude != null && longitude != null) {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      contentPadding: EdgeInsets.zero,
+                                      content: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            16.0), // Arredonda as bordas do AlertDialog
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.9,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.6,
+                                          child: MapaDialog(
+                                            latitude: double.parse(
+                                                latitude.toString()),
+                                            longitude: double.parse(
+                                                longitude.toString()),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text('Coordenadas não disponíveis'),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text(
+                              'Ver no Mapa',
+                              style: TextStyle(color: Color(0xFF0F6FC6)),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
                             'Titulo Formulário: ${certificado['tituloFormulario'] ?? ''}',
                             style: TextStyle(fontSize: 14),
                           ),
@@ -142,7 +200,10 @@ class CertificadoPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment
                                       .center, // Centraliza os textos horizontalmente
                                   children: [
-                                    Text('Nota Governança: ', textAlign: TextAlign.center,),
+                                    Text(
+                                      'Nota Governança: ',
+                                      textAlign: TextAlign.center,
+                                    ),
                                     SizedBox(height: 2),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
@@ -181,7 +242,10 @@ class CertificadoPage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text('Nota Social: ',textAlign: TextAlign.center,),
+                                    Text(
+                                      'Nota Social: ',
+                                      textAlign: TextAlign.center,
+                                    ),
                                     SizedBox(height: 2),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
@@ -219,7 +283,10 @@ class CertificadoPage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text('Nota Ambiental: ',textAlign: TextAlign.center,),
+                                    Text(
+                                      'Nota Ambiental: ',
+                                      textAlign: TextAlign.center,
+                                    ),
                                     SizedBox(height: 2),
                                     Container(
                                       padding: const EdgeInsets.symmetric(

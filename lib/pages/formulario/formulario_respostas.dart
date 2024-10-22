@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:saga_flutter_app/pages/formulario/formulario.dart';
 import 'dart:convert';
 import 'package:saga_flutter_app/widgets/main_scaffold.dart';
+import 'package:geolocator/geolocator.dart';
 
 class FormularioRespostasPage extends StatefulWidget {
   final String id;
@@ -30,7 +31,7 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
         "http://127.0.0.1:8080/formulario/${widget.empresaId}/iniciar/respostas/${widget.id}";
 
     final response = await http.get(Uri.parse(apiUrl));
-    
+
     if (response.statusCode == 200) {
       final decodedResponse = utf8.decode(response.bodyBytes);
       final jsonResponse = json.decode(decodedResponse);
@@ -157,6 +158,34 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
 
   // Função para enviar respostas para a API
   Future<void> enviarRespostas() async {
+    bool serviceEnabled;
+  LocationPermission permission;
+
+  // Verifique se os serviços de localização estão habilitados.
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    // Serviços de localização estão desabilitados, solicite que o usuário habilite.
+    return Future.error('Serviços de localização estão desabilitados.');
+  }
+
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // Permissão negada. Mostre uma mensagem ou trate o erro.
+      return Future.error('Permissão de localização negada.');
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    // Permissão foi negada permanentemente.
+    return Future.error(
+        'Permissão de localização negada permanentemente. Não é possível solicitar permissões.');
+  }
+
+  // Se a permissão foi concedida, obtenha a localização.
+  Position position = await Geolocator.getCurrentPosition();
+  print(position);
     // Organizar as respostas por eixo
     final responsesByAxis = {
       'respostasGov': [],
@@ -212,6 +241,7 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
           'respostasSoc': responsesByAxis['respostasSoc'],
         },
       ],
+      'coordenadas': position
     };
 
     // Enviar resposta para o backend
@@ -248,15 +278,15 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
         );
 
         Future.delayed(Duration(seconds: 2), () {
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => MainScaffold(
-          //       body: FormularioPage(),
-          //       title: 'Formulários',
-          //     ),
-          //   ),
-          // );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainScaffold(
+                body: FormularioPage(),
+                title: 'Formulários',
+              ),
+            ),
+          );
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
