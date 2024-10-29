@@ -14,9 +14,9 @@ class ApiDashboardService {
 
   Future<Map<String, dynamic>> fetchPorteData() async {
     final response = await http.get(Uri.parse(apiPorte));
-
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      var utf8Response = utf8.decode(response.bodyBytes);
+      return json.decode(utf8Response);
     } else {
       throw Exception('Falha ao carregar dados de porte');
     }
@@ -24,9 +24,9 @@ class ApiDashboardService {
 
   Future<Map<String, dynamic>> fetchSetorData() async {
     final response = await http.get(Uri.parse(apiSetor));
-
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      var utf8Response = utf8.decode(response.bodyBytes);
+      return json.decode(utf8Response);
     } else {
       throw Exception('Falha ao carregar dados de setor');
     }
@@ -34,9 +34,9 @@ class ApiDashboardService {
 
   Future<int> fetchTotalEmpresas() async {
     final response = await http.get(Uri.parse(apiTotal));
-
     if (response.statusCode == 200) {
-      return int.parse(response.body);
+      var utf8Response = utf8.decode(response.bodyBytes);
+      return int.parse(utf8Response);
     } else {
       throw Exception('Falha ao carregar total de empresas');
     }
@@ -44,9 +44,9 @@ class ApiDashboardService {
 
   Future<int> fetchTotalChecklists() async {
     final response = await http.get(Uri.parse(apiChecklist));
-
     if (response.statusCode == 200) {
-      return int.parse(response.body);
+      var utf8Response = utf8.decode(response.bodyBytes);
+      return int.parse(utf8Response);
     } else {
       throw Exception('Falha ao carregar total de checklists');
     }
@@ -54,9 +54,9 @@ class ApiDashboardService {
 
   Future<List<EmpresasMesData>> fetchEmpresasMes() async {
     final response = await http.get(Uri.parse(apiEmpresasMes));
-
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+      var utf8Response = utf8.decode(response.bodyBytes);
+      final data = json.decode(utf8Response);
       return (data as List).map((item) {
         return EmpresasMesData(item[0], item[1], item[2]);
       }).toList();
@@ -114,13 +114,17 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Scaffold(
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Column(
             children: [
-              Expanded(
-                child: FutureBuilder<List<PorteData>>(
+              Card(
+                elevation: 4,
+                margin: EdgeInsets.all(16),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: FutureBuilder<List<PorteData>>(
                     future: _porteDataFuture,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -137,10 +141,11 @@ class _DashboardPageState extends State<DashboardPage> {
                       return SfCircularChart(
                         title: ChartTitle(text: 'Distribuição de Portes'),
                         legend: Legend(
-                            position: LegendPosition.bottom,
-                            isVisible: true,
-                            overflowMode: LegendItemOverflowMode.wrap,
-                            shouldAlwaysShowScrollbar: true),
+                          position: LegendPosition.right,
+                          isVisible: true,
+                          overflowMode: LegendItemOverflowMode.wrap,
+                          shouldAlwaysShowScrollbar: true,
+                        ),
                         tooltipBehavior: _tooltipBehaviorPorte,
                         series: <CircularSeries>[
                           PieSeries<PorteData, String>(
@@ -154,11 +159,16 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         ],
                       );
-                    }),
+                    },
+                  ),
+                ),
               ),
-              SizedBox(width: 10), // Espaçamento entre os gráficos
-              Expanded(
-                child: FutureBuilder<List<SetorData>>(
+              Card(
+                elevation: 4,
+                margin: EdgeInsets.all(16),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: FutureBuilder<List<SetorData>>(
                     future: _setorDataFuture,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -175,10 +185,11 @@ class _DashboardPageState extends State<DashboardPage> {
                       return SfCircularChart(
                         title: ChartTitle(text: 'Distribuição de Setores'),
                         legend: Legend(
-                            position: LegendPosition.bottom,
-                            isVisible: true,
-                            overflowMode: LegendItemOverflowMode.wrap,
-                            shouldAlwaysShowScrollbar: true),
+                          position: LegendPosition.right,
+                          isVisible: true,
+                          overflowMode: LegendItemOverflowMode.wrap,
+                          shouldAlwaysShowScrollbar: true,
+                        ),
                         tooltipBehavior: _tooltipBehaviorSetor,
                         series: <CircularSeries>[
                           PieSeries<SetorData, String>(
@@ -192,127 +203,147 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         ],
                       );
-                    }),
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0), // Margem lateral
+                    child: Container(
+                      width: 300, // Ajuste a largura conforme necessário
+                      child: FutureBuilder<int>(
+                        future: _totalEmpresasFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text('Erro ao carregar total de empresas');
+                          } else {
+                            return Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text('Total de Empresas',
+                                        style: TextStyle(fontSize: 16)),
+                                    SizedBox(height: 8),
+                                    Text(snapshot.data.toString(),
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0), // Margem lateral
+                    child: Container(
+                      width: 300, // Ajuste a largura conforme necessário
+                      child: FutureBuilder<int>(
+                        future: _totalChecklistsFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text('Erro ao carregar total de checklists');
+                          } else {
+                            return Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text('Total de Checklists',
+                                        style: TextStyle(fontSize: 16)),
+                                    SizedBox(height: 8),
+                                    Text(snapshot.data.toString(),
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Card(
+                elevation: 4,
+                margin: EdgeInsets.all(16),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: FutureBuilder<List<EmpresasMesData>>(
+                    future: _empresasMesFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(
+                            child: Text(
+                                'Erro ao carregar dados de empresas por mês: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Center(
+                            child: Text(
+                                'Nenhum dado de empresas por mês disponível'));
+                      }
+
+                      return SfCartesianChart(
+                        title: ChartTitle(text: 'Empresas cadastradas por Mês'),
+                        legend: Legend(isVisible: true),
+                        tooltipBehavior: _tooltipBehaviorEmpresasMes,
+                        series: <CartesianSeries>[
+                          ColumnSeries<EmpresasMesData, String>(
+                            dataSource: snapshot.data!,
+                            xValueMapper: (EmpresasMesData data, _) =>
+                                '${data.ano}-${data.mes}',
+                            yValueMapper: (EmpresasMesData data, _) =>
+                                data.quantidade,
+                            dataLabelSettings:
+                                DataLabelSettings(isVisible: true),
+                          ),
+                        ],
+                        primaryXAxis: CategoryAxis(),
+                        primaryYAxis: NumericAxis(),
+                      );
+                    },
+                  ),
+                ),
               ),
             ],
           ),
-          SizedBox(height: 20), // Espaçamento extra
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // Card Total de Empresas
-              FutureBuilder<int>(
-                  future: _totalEmpresasFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Erro ao carregar total de empresas');
-                    } else {
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Total de Empresas',
-                                  style: TextStyle(fontSize: 16)),
-                              SizedBox(height: 8),
-                              Text(snapshot.data.toString(),
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ),
-                      );
-                    }
-                  }),
-              // Card Total de Checklists
-              FutureBuilder<int>(
-                  future: _totalChecklistsFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Erro ao carregar total de checklists');
-                    } else {
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Total de Checklists',
-                                  style: TextStyle(fontSize: 16)),
-                              SizedBox(height: 8),
-                              Text(snapshot.data.toString(),
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ),
-                      );
-                    }
-                  }),
-            ],
-          ),
-          SizedBox(height: 20),
-          // Gráfico de Empresas por Mês
-          Expanded(
-            child: FutureBuilder<List<EmpresasMesData>>(
-              future: _empresasMesFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(
-                      child: Text(
-                          'Erro ao carregar dados de empresas por mês: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(
-                      child:
-                          Text('Nenhum dado de empresas por mês disponível'));
-                }
-
-                return SfCartesianChart(
-                  primaryXAxis: CategoryAxis(),
-                  title: ChartTitle(text: 'Empresas Cadastradas por Mês'),
-                  tooltipBehavior: _tooltipBehaviorEmpresasMes,
-                  series: <CartesianSeries>[
-                    ColumnSeries<EmpresasMesData, String>(
-                      dataSource: snapshot.data!,
-                      xValueMapper: (EmpresasMesData data, _) =>
-                          '${data.mes}/${data.ano}',
-                      yValueMapper: (EmpresasMesData data, _) =>
-                          data.quantidade,
-                      dataLabelSettings: DataLabelSettings(isVisible: true),
-                      enableTooltip: true,
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
 
-// Classes de modelo para os dados
 class PorteData {
   final String porte;
   final int quantidade;
-
   PorteData(this.porte, this.quantidade);
 }
 
 class SetorData {
   final String setor;
   final int quantidade;
-
   SetorData(this.setor, this.quantidade);
 }
 
@@ -320,6 +351,5 @@ class EmpresasMesData {
   final int ano;
   final int mes;
   final int quantidade;
-
   EmpresasMesData(this.ano, this.mes, this.quantidade);
 }
