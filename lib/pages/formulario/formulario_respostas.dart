@@ -28,7 +28,7 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
   // Função para buscar dados da API
   Future<Map<String, dynamic>> fetchData() async {
     final String apiUrl =
-        "http://127.0.0.1:8080/formulario/${widget.empresaId}/iniciar/respostas/${widget.id}";
+        "http://186.226.48.222:8080/formulario/${widget.empresaId}/iniciar/respostas/${widget.id}";
 
     final response = await http.get(Uri.parse(apiUrl));
 
@@ -159,33 +159,33 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
   // Função para enviar respostas para a API
   Future<void> enviarRespostas() async {
     bool serviceEnabled;
-  LocationPermission permission;
+    LocationPermission permission;
 
-  // Verifique se os serviços de localização estão habilitados.
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    // Serviços de localização estão desabilitados, solicite que o usuário habilite.
-    return Future.error('Serviços de localização estão desabilitados.');
-  }
-
-  permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      // Permissão negada. Mostre uma mensagem ou trate o erro.
-      return Future.error('Permissão de localização negada.');
+    // Verifique se os serviços de localização estão habilitados.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Serviços de localização estão desabilitados, solicite que o usuário habilite.
+      return Future.error('Serviços de localização estão desabilitados.');
     }
-  }
 
-  if (permission == LocationPermission.deniedForever) {
-    // Permissão foi negada permanentemente.
-    return Future.error(
-        'Permissão de localização negada permanentemente. Não é possível solicitar permissões.');
-  }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissão negada. Mostre uma mensagem ou trate o erro.
+        return Future.error('Permissão de localização negada.');
+      }
+    }
 
-  // Se a permissão foi concedida, obtenha a localização.
-  Position position = await Geolocator.getCurrentPosition();
-  print(position);
+    if (permission == LocationPermission.deniedForever) {
+      // Permissão foi negada permanentemente.
+      return Future.error(
+          'Permissão de localização negada permanentemente. Não é possível solicitar permissões.');
+    }
+
+    // Se a permissão foi concedida, obtenha a localização.
+    Position position = await Geolocator.getCurrentPosition();
+    print(position);
     // Organizar as respostas por eixo
     final responsesByAxis = {
       'respostasGov': [],
@@ -246,7 +246,7 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
 
     // Enviar resposta para o backend
     final apiUrl =
-        "http://127.0.0.1:8080/formulario/${widget.id}/iniciar/respostas/${widget.empresaId}/salvar";
+        "http://186.226.48.222:8080/formulario/${widget.id}/iniciar/respostas/${widget.empresaId}/salvar";
 
     final response = await http.post(
       Uri.parse(apiUrl),

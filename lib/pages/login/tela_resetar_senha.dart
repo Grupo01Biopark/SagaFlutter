@@ -12,9 +12,9 @@ class ResetPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
 
-
     Future<void> sendPasswordResetRequest(String email) async {
-      final String apiUrl = 'http://127.0.0.1:8080/api/auth/forgot-password';
+      final String apiUrl =
+          'http://186.226.48.222:8080/api/auth/forgot-password';
 
       try {
         final response = await http.post(
@@ -34,8 +34,8 @@ class ResetPasswordPage extends StatelessWidget {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text('E-mail Enviado'),
-                content: const Text(
-                    'A senha foi enviada para o e-mail informado.'),
+                content:
+                    const Text('A senha foi enviada para o e-mail informado.'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
@@ -159,8 +159,7 @@ class ResetPasswordPage extends StatelessWidget {
                       }
                     },
                     child: const Text("Solicitar E-mail",
-                        style: TextStyle(color: Color(0xFF0F6FC6))
-                    ),
+                        style: TextStyle(color: Color(0xFF0F6FC6))),
                   ),
                 ],
               ),

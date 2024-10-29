@@ -26,7 +26,7 @@ class _EditUserPageState extends State<EditUserPage> {
 
   Future<void> _fetchUserData() async {
     final response = await http.get(Uri.parse(
-        "http://127.0.0.1:8080/usuarios/listar/${widget.userId}"));
+        "http://186.226.48.222:8080/usuarios/listar/${widget.userId}"));
 
     if (response.statusCode == 200) {
       var utf8Response = utf8.decode(response.bodyBytes);
@@ -44,7 +44,7 @@ class _EditUserPageState extends State<EditUserPage> {
   Future<void> _editUser() async {
     if (_formKey.currentState!.validate()) {
       final apiUrl =
-          "http://127.0.0.1:8080/usuarios/editar/${widget.userId}";
+          "http://186.226.48.222:8080/usuarios/editar/${widget.userId}";
 
       Map<String, dynamic> userData = {
         "name": _nameController.text,
@@ -56,7 +56,7 @@ class _EditUserPageState extends State<EditUserPage> {
         headers: {"Content-Type": "application/json"},
         body: json.encode(userData),
       );
-      
+
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Usuário editado com sucesso!')),
@@ -65,7 +65,7 @@ class _EditUserPageState extends State<EditUserPage> {
       } else {
         var utf8Response = utf8.decode(response.bodyBytes);
         var responseJson = json.decode(utf8Response);
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(responseJson['message'])),
         );

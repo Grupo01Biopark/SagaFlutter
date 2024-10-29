@@ -3,11 +3,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ApiFormularioListService {
-  final String apiUrl = "http://127.0.0.1:8080/formulario";
-  final String apiAdicionarUrl = "http://127.0.0.1:8080/formulario/adicionar";
-  
+  final String apiUrl = "http://186.226.48.222:8080/formulario";
+  final String apiAdicionarUrl =
+      "http://186.226.48.222:8080/formulario/adicionar";
+
   // Novo endpoint para perguntas
-  final String perguntasUrl = "http://127.0.0.1:8080/checklists";
+  final String perguntasUrl = "http://186.226.48.222:8080/checklists";
 
   Future<Map<String, dynamic>> fetchData() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -20,6 +21,7 @@ class ApiFormularioListService {
   }
 
   Future<void> adicionarFormulario(Map<String, dynamic> formularioData) async {
+    print("teste");
     final response = await http.post(
       Uri.parse(apiAdicionarUrl),
       headers: {"Content-Type": "application/json"},
@@ -33,7 +35,8 @@ class ApiFormularioListService {
 
   // Função para buscar as perguntas do checklist
   Future<List<dynamic>> fetchPerguntas(String checklistId) async {
-    final response = await http.get(Uri.parse('$perguntasUrl/$checklistId/perguntas'));
+    final response =
+        await http.get(Uri.parse('$perguntasUrl/$checklistId/perguntas'));
     if (response.statusCode == 200) {
       var utf8Response = utf8.decode(response.bodyBytes);
       var decodedData = json.decode(utf8Response);
@@ -124,7 +127,7 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
   Future<void> _showPerguntasModal(String checklistId) async {
     try {
       List<dynamic> perguntas = await apiService.fetchPerguntas(checklistId);
-      
+
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -136,7 +139,8 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
                       children: perguntas.map((pergunta) {
                         return ListTile(
                           title: Text(pergunta[0]), // Título da pergunta
-                          subtitle: Text('Descrição:${pergunta[1]} Categoria: ${pergunta[2]}, Setor: ${pergunta[3]}, Porte: ${pergunta[4]}'),
+                          subtitle: Text(
+                              'Descrição:${pergunta[1]} Categoria: ${pergunta[2]}, Setor: ${pergunta[3]}, Porte: ${pergunta[4]}'),
                         );
                       }).toList(),
                     ),
@@ -243,8 +247,7 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
                 onPressed: _cadastrarFormulario,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF0F6FC6),
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 24, vertical: 22),
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 22),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
                   ),

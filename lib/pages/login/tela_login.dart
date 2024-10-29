@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    final url = Uri.parse('http://127.0.0.1:8080/api/auth/login');
+    final url = Uri.parse('http://186.226.48.222:8080/api/auth/login');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -47,23 +47,20 @@ class _LoginPageState extends State<LoginPage> {
 
         final Map<String, dynamic> responseBody = json.decode(response.body);
 
-
-      if(responseBody['tagAlterarSenha'] == 'true'){
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ResetLoginPasswordPage(email: emailController.text),
-          ),
-        );
-      }else{
-        Navigator.of(context).pushReplacementNamed('/dashboard');
-        Provider.of<UserProvider>(context, listen: false).setUser(user);
-      }
-
-      
-
+        if (responseBody['tagAlterarSenha'] == 'true') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  ResetLoginPasswordPage(email: emailController.text),
+            ),
+          );
+        } else {
+          Navigator.of(context).pushReplacementNamed('/dashboard');
+          Provider.of<UserProvider>(context, listen: false).setUser(user);
+        }
       } catch (e) {
-          showErrorDialog("Erro! Contate um suporte.");
+        showErrorDialog("Erro! Contate um suporte.");
       }
     } else {
       // Login falhou, exibir mensagem de erro

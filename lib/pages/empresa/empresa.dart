@@ -4,7 +4,7 @@ import 'package:saga_flutter_app/pages/empresa/empresa_editar.dart';
 import 'dart:convert';
 
 class ApiListEmpresa {
-  final String apiUrl = "http://127.0.0.1:8080/empresas/listar";
+  final String apiUrl = "http://186.226.48.222:8080/empresas/listar";
 
   Future<List<dynamic>> fetchData() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -41,7 +41,7 @@ class _EmpresaPageState extends State<EmpresaPage> {
   }
 
   Future<void> deleteCompany(String companyId) async {
-    final url = 'http://127.0.0.1:8080/empresas/excluir/$companyId';
+    final url = 'http://186.226.48.222:8080/empresas/excluir/$companyId';
 
     try {
       final response = await http.delete(Uri.parse(url));
@@ -135,7 +135,8 @@ class _EmpresaPageState extends State<EmpresaPage> {
                               ),
                             SizedBox(height: 8),
                             Row(
-                              children: [ // Adiciona um espaço entre os itens
+                              children: [
+                                // Adiciona um espaço entre os itens
                                 Container(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 8.0, vertical: 4.0),

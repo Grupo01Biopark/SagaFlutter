@@ -18,13 +18,15 @@ class _FormularioRespostasVisuPageState
   late Future<Map<String, dynamic>> formularioData;
 
   // Mapa para armazenar o estado dos checkboxes e do campo de texto
-  Map<int, String> responses = {}; // Armazenará as respostas (1, 2, 3 para Conforme, Médio, Não Conforme)
-  Map<int, TextEditingController> textControllers = {}; // Armazenará os textos para cada pergunta
+  Map<int, String> responses =
+      {}; // Armazenará as respostas (1, 2, 3 para Conforme, Médio, Não Conforme)
+  Map<int, TextEditingController> textControllers =
+      {}; // Armazenará os textos para cada pergunta
 
   // Função para buscar dados da API
   Future<Map<String, dynamic>> fetchData() async {
     final String apiUrl =
-        "http://127.0.0.1:8080/formulario/respostas/${widget.certId}";
+        "http://186.226.48.222:8080/formulario/respostas/${widget.certId}";
 
     final response = await http.get(Uri.parse(apiUrl));
 
@@ -50,7 +52,8 @@ class _FormularioRespostasVisuPageState
       int perguntaId = pergunta['id'];
       // Inicializa o controlador de texto com a observação vinda da API
       textControllers[perguntaId] = TextEditingController(
-        text: pergunta['observacao'] ?? '', // Preenche com a observação existente, se disponível
+        text: pergunta['observacao'] ??
+            '', // Preenche com a observação existente, se disponível
       );
       // Inicializa as respostas com as respostas existentes da API
       responses[perguntaId] = pergunta['resposta']?.toString() ?? '';
@@ -96,7 +99,8 @@ class _FormularioRespostasVisuPageState
                 SizedBox(height: 8),
                 // Descrição da Pergunta
                 Text(
-                  pergunta['descricao'] ?? '', // Exibe o texto da pergunta, se disponível
+                  pergunta['descricao'] ??
+                      '', // Exibe o texto da pergunta, se disponível
                   style: TextStyle(fontSize: 14),
                 ),
                 SizedBox(height: 16),

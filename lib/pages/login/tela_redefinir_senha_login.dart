@@ -10,41 +10,45 @@ class ResetLoginPasswordPage extends StatelessWidget {
 
   ResetLoginPasswordPage({super.key, required this.email});
 
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _validateAndSubmit(BuildContext context) async {
-      final String password = _confirmPasswordController.text;
+    final String password = _confirmPasswordController.text;
 
     print(password);
 
-      try {
-        final url = Uri.parse('http://127.0.0.1:8080/api/auth/reset-password');
-        final response = await http.post(
-          url,
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({'email': email, 'password': password}),
-        );
+    try {
+      final url =
+          Uri.parse('http://186.226.48.222:8080/api/auth/reset-password');
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
 
-        if (response.statusCode == 200) {
-          _showDialog(context, 'Sucesso', 'Senha redefinida com sucesso!', () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginPage()),
-            );
-          });
-        } else {
-          final responseBody = jsonDecode(response.body);
-          _showDialog(context, 'Erro', responseBody['message'] ?? 'Erro ao redefinir senha');
-        }
-      } catch (e) {
-        _showDialog(context, 'Erro', 'Ocorreu um erro inesperado. Tente novamente.');
+      if (response.statusCode == 200) {
+        _showDialog(context, 'Sucesso', 'Senha redefinida com sucesso!', () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          );
+        });
+      } else {
+        final responseBody = jsonDecode(response.body);
+        _showDialog(context, 'Erro',
+            responseBody['message'] ?? 'Erro ao redefinir senha');
       }
-
+    } catch (e) {
+      _showDialog(
+          context, 'Erro', 'Ocorreu um erro inesperado. Tente novamente.');
+    }
   }
 
-  void _showDialog(BuildContext context, String title, String message, [VoidCallback? onOkPressed]) {
+  void _showDialog(BuildContext context, String title, String message,
+      [VoidCallback? onOkPressed]) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -108,13 +112,12 @@ class ResetLoginPasswordPage extends StatelessWidget {
                       const GeneratePassword(),
                       const SizedBox(height: 16),
                       TextFormField(
-                        controller: _confirmPasswordController,
-                        decoration: InputDecoration(
-                          labelText: 'Confirmar Senha',
-                          border: const OutlineInputBorder(),
-                        ),
-                        obscureText: _obscureConfirmPassword
-                      ),
+                          controller: _confirmPasswordController,
+                          decoration: InputDecoration(
+                            labelText: 'Confirmar Senha',
+                            border: const OutlineInputBorder(),
+                          ),
+                          obscureText: _obscureConfirmPassword),
                       const SizedBox(height: 25),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -123,9 +126,12 @@ class ResetLoginPasswordPage extends StatelessWidget {
                             child: ElevatedButton(
                               onPressed: () => _validateAndSubmit(context),
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF0F6FC6)),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Color(0xFF0F6FC6)),
                               ),
-                              child: const Text('Redefinir Senha', style: TextStyle(color: Colors.white)),
+                              child: const Text('Redefinir Senha',
+                                  style: TextStyle(color: Colors.white)),
                             ),
                           ),
                           const SizedBox(width: 8),

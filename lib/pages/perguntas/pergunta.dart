@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:saga_flutter_app/pages/perguntas/pergunta_editar.dart';
 
 class ApiListPergunta {
-  final String apiUrl = "http://127.0.0.1:8080/perguntas/listar";
+  final String apiUrl = "http://186.226.48.222:8080/perguntas/listar";
 
   Future<List<dynamic>> fetchData() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -43,7 +43,7 @@ class _PerguntaPageState extends State<PerguntaPage> {
   }
 
   Future<void> deleteQuestion(String questionId) async {
-    final url = 'http://127.0.0.1:8080/perguntas/excluir/$questionId';
+    final url = 'http://186.226.48.222:8080/perguntas/excluir/$questionId';
 
     try {
       final response = await http.delete(Uri.parse(url));

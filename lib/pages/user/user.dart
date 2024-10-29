@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:saga_flutter_app/pages/user/user_editar.dart';
 
 class ApiListUsuario {
-  final String apiUrl = "http://127.0.0.1:8080/usuarios/listar";
+  final String apiUrl = "http://186.226.48.222:8080/usuarios/listar";
 
   Future<List<dynamic>> fetchData() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -41,7 +41,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
   }
 
   Future<void> deleteUser(String userId) async {
-    final url = 'http://127.0.0.1:8080/usuarios/excluir/$userId';
+    final url = 'http://186.226.48.222:8080/usuarios/excluir/$userId';
 
     try {
       final response = await http.delete(Uri.parse(url));
@@ -121,7 +121,9 @@ class _UsuarioPageState extends State<UsuarioPage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => EditUserPage(userId: item['id'],),
+                                        builder: (context) => EditUserPage(
+                                          userId: item['id'],
+                                        ),
                                       ),
                                     );
                                   },

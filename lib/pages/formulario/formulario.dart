@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:saga_flutter_app/pages/formulario/formulario_iniciar.dart';
 
 class ApiFormularioListService {
-  final String apiUrl = "http://127.0.0.1:8080/formulario/listar";
+  final String apiUrl = "http://186.226.48.222:8080/formulario/listar";
 
   Future<List<dynamic>> fetchData() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -35,7 +35,7 @@ class _FormularioPageState extends State<FormularioPage> {
 
   // Função para excluir o formulário
   Future<void> deleteFormulario(String formularioId) async {
-    final url = 'http://127.0.0.1:8080/formulario/excluir/$formularioId';
+    final url = 'http://186.226.48.222:8080/formulario/excluir/$formularioId';
 
     try {
       final response = await http.delete(Uri.parse(url));
@@ -83,7 +83,7 @@ class _FormularioPageState extends State<FormularioPage> {
                     var tags = [
                       item['checklists']['setor'],
                       item['checklists']['porte']
-                    ]; 
+                    ];
                     return Card(
                       elevation: 5,
                       shape: RoundedRectangleBorder(
@@ -115,14 +115,17 @@ class _FormularioPageState extends State<FormularioPage> {
                               runSpacing: 4.0,
                               children: tags.map<Widget>((tag) {
                                 return Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 4.0),
                                   decoration: BoxDecoration(
                                     color: Colors.blueGrey[100],
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                   child: Text(
                                     tag,
-                                    style: TextStyle(fontSize: 12, color: Colors.blueGrey[800]),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.blueGrey[800]),
                                   ),
                                 );
                               }).toList(),
@@ -139,7 +142,9 @@ class _FormularioPageState extends State<FormularioPage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => FormularioIniciarPage(id: item['id'].toString()),
+                                        builder: (context) =>
+                                            FormularioIniciarPage(
+                                                id: item['id'].toString()),
                                       ),
                                     );
                                   },
@@ -152,18 +157,22 @@ class _FormularioPageState extends State<FormularioPage> {
                                       builder: (BuildContext context) {
                                         return AlertDialog(
                                           title: Text('Confirmar Exclusão'),
-                                          content: Text('Tem certeza de que deseja excluir este formulário?'),
+                                          content: Text(
+                                              'Tem certeza de que deseja excluir este formulário?'),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
-                                                Navigator.of(context).pop(); // Fecha o modal
+                                                Navigator.of(context)
+                                                    .pop(); // Fecha o modal
                                               },
                                               child: Text('Cancelar'),
                                             ),
                                             TextButton(
                                               onPressed: () {
-                                                Navigator.of(context).pop(); // Fecha o modal
-                                                deleteFormulario(item['id'].toString()); // Chama a função de exclusão
+                                                Navigator.of(context)
+                                                    .pop(); // Fecha o modal
+                                                deleteFormulario(item['id']
+                                                    .toString()); // Chama a função de exclusão
                                               },
                                               child: Text('Excluir'),
                                             ),

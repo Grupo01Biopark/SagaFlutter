@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 class AddPerguntaPage extends StatefulWidget {
   @override
   _AddPerguntaPageState createState() => _AddPerguntaPageState();
@@ -31,8 +30,8 @@ class _AddPerguntaPageState extends State<AddPerguntaPage> {
   }
 
   Future<void> _fetchEixosPortesSetores() async {
-    final response =
-        await http.get(Uri.parse("http://127.0.0.1:8080/perguntas/listar"));
+    final response = await http
+        .get(Uri.parse("http://186.226.48.222:8080/perguntas/listar"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);
@@ -48,13 +47,13 @@ class _AddPerguntaPageState extends State<AddPerguntaPage> {
 
   Future<void> _addPergunta() async {
     if (_formKey.currentState!.validate()) {
-      final apiUrl = "http://127.0.0.1:8080/perguntas/adicionar";
+      final apiUrl = "http://186.226.48.222:8080/perguntas/adicionar";
 
       Map<String, dynamic> perguntaData = {
         "titulo": _tituloController.text,
         "descricao": _descricaoController.text,
         "importante": _importante ? 1 : 0,
-        "ativa":1,
+        "ativa": 1,
         "eixo": {
           "titulo": _selectedEixo,
         },
@@ -79,7 +78,7 @@ class _AddPerguntaPageState extends State<AddPerguntaPage> {
         Navigator.of(context).pushReplacementNamed('/pergunta');
       } else {
         var responseJson = json.decode(response.body);
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(responseJson['error'])),
         );
@@ -91,7 +90,7 @@ class _AddPerguntaPageState extends State<AddPerguntaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-         automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         title: Text('Adicionar Pergunta'),
       ),
       body: Padding(

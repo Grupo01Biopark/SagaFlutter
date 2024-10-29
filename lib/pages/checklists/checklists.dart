@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'checklists_editar.dart';
 
 class ApiListChecklists {
-  final String apiUrl = "http://127.0.0.1:8080/checklists/listar";
+  final String apiUrl = "http://186.226.48.222:8080/checklists/listar";
 
   Future<Map<String, dynamic>> fetchData() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -35,7 +35,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   Future<void> deleteChecklist(String checklistId) async {
-    final url = 'http://127.0.0.1:8080/checklists/inativar/$checklistId';
+    final url = 'http://186.226.48.222:8080/checklists/inativar/$checklistId';
 
     try {
       final response = await http.post(Uri.parse(url));
@@ -57,7 +57,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditChecklistPage(checklistId: int.parse(checklistId)),
+        builder: (context) =>
+            EditChecklistPage(checklistId: int.parse(checklistId)),
       ),
     ).then((_) {
       setState(() {
@@ -80,7 +81,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Erro: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!['checklists'].isEmpty) {
+          } else if (!snapshot.hasData ||
+              snapshot.data!['checklists'].isEmpty) {
             return Center(child: Text('Nenhum dado encontrado'));
           } else {
             List<dynamic> checklists = snapshot.data!['checklists'];
@@ -128,7 +130,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
                             style: TextStyle(fontSize: 14),
                           ),
                           SizedBox(height: 16),
-                          item['formularioChecklists'] != null && item['formularioChecklists'].isNotEmpty
+                          item['formularioChecklists'] != null &&
+                                  item['formularioChecklists'].isNotEmpty
                               ? Text(
                                   'Quantidade de Formulários: ${item['formularioChecklists'].length}',
                                   style: TextStyle(fontSize: 14),
@@ -141,7 +144,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
                               IconButton(
                                 icon: Icon(Icons.edit),
                                 onPressed: () {
-                                  navigateToEditChecklist(item['id'].toString());
+                                  navigateToEditChecklist(
+                                      item['id'].toString());
                                 },
                               ),
                               IconButton(
@@ -152,18 +156,22 @@ class _ChecklistPageState extends State<ChecklistPage> {
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: Text('Confirmar Inativação'),
-                                        content: Text('Tem certeza de que deseja inativar este checklist?'),
+                                        content: Text(
+                                            'Tem certeza de que deseja inativar este checklist?'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
-                                              Navigator.of(context).pop(); // Fecha o modal
+                                              Navigator.of(context)
+                                                  .pop(); // Fecha o modal
                                             },
                                             child: Text('Cancelar'),
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              Navigator.of(context).pop(); // Fecha o modal
-                                              deleteChecklist(item['id'].toString());
+                                              Navigator.of(context)
+                                                  .pop(); // Fecha o modal
+                                              deleteChecklist(
+                                                  item['id'].toString());
                                             },
                                             child: Text('Inativar'),
                                           ),
