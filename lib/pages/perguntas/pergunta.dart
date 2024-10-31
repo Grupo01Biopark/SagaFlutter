@@ -45,6 +45,8 @@ class _PerguntaPageState extends State<PerguntaPage> {
   List<dynamic> portes = [];
   List<dynamic> setores = [];
 
+  final TextEditingController  _tituloController =  TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -93,6 +95,8 @@ class _PerguntaPageState extends State<PerguntaPage> {
       _selectedSetor = null;
       _selectedPorte = null;
       _searchTerm = null;
+
+      _tituloController.clear();
     });
   }
 
@@ -198,6 +202,7 @@ class _PerguntaPageState extends State<PerguntaPage> {
                     ),
                     SizedBox(height: 16),
                     TextField(
+                      controller: _tituloController,
                       decoration: InputDecoration(
                         labelText: 'Buscar por título',
                         border: OutlineInputBorder(),
