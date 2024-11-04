@@ -38,7 +38,7 @@ class _EditPerguntaPageState extends State<EditPerguntaPage> {
 
   Future<void> _fetchPerguntaData() async {
     final response = await http.get(Uri.parse(
-        "http://186.226.48.222:8080/perguntas/listar/${widget.perguntaId}"));
+        "http://127.0.0.1:8080/perguntas/listar/${widget.perguntaId}"));
 
     if (response.statusCode == 200) {
       var utf8Response = utf8.decode(response.bodyBytes);
@@ -58,8 +58,8 @@ class _EditPerguntaPageState extends State<EditPerguntaPage> {
   }
 
   Future<void> _fetchEixosPortesSetores() async {
-    final response = await http
-        .get(Uri.parse("http://186.226.48.222:8080/perguntas/listar"));
+    final response =
+        await http.get(Uri.parse("http://127.0.0.1:8080/perguntas/listar"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);
@@ -76,7 +76,7 @@ class _EditPerguntaPageState extends State<EditPerguntaPage> {
   Future<void> _editPergunta() async {
     if (_formKey.currentState!.validate()) {
       final apiUrl =
-          "http://186.226.48.222:8080/perguntas/editar/${widget.perguntaId}";
+          "http://127.0.0.1:8080/perguntas/editar/${widget.perguntaId}";
 
       Map<String, dynamic> perguntaData = {
         "titulo": _tituloController.text,

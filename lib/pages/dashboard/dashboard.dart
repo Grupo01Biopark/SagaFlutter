@@ -6,11 +6,11 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 
 class ApiDashboardService {
-  final String apiPorte = "http://186.226.48.222:8080/dashboard/porte";
-  final String apiSetor = "http://186.226.48.222:8080/dashboard/setor";
-  final String apiTotal = "http://186.226.48.222:8080/dashboard/total";
-  final String apiChecklist = "http://186.226.48.222:8080/dashboard/checklist";
-  final String apiEmpresasMes = "http://186.226.48.222:8080/dashboard/mes";
+  final String apiPorte = "http://127.0.0.1:8080/dashboard/porte";
+  final String apiSetor = "http://127.0.0.1:8080/dashboard/setor";
+  final String apiTotal = "http://127.0.0.1:8080/dashboard/total";
+  final String apiChecklist = "http://127.0.0.1:8080/dashboard/checklist";
+  final String apiEmpresasMes = "http://127.0.0.1:8080/dashboard/mes";
 
   Future<Map<String, dynamic>> fetchPorteData() async {
     final response = await http.get(Uri.parse(apiPorte));

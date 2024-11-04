@@ -41,7 +41,7 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
 
   Future<void> _fetchPortesSetores() async {
     final response =
-        await http.get(Uri.parse("http://186.226.48.222:8080/empresas/listar"));
+        await http.get(Uri.parse("http://127.0.0.1:8080/empresas/listar"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);
@@ -55,8 +55,8 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
   }
 
   Future<void> _fetchEmpresaData(int id) async {
-    final response = await http
-        .get(Uri.parse("http://186.226.48.222:8080/empresas/listar/$id"));
+    final response =
+        await http.get(Uri.parse("http://127.0.0.1:8080/empresas/listar/$id"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);
@@ -83,7 +83,7 @@ class _EditEmpresaPageState extends State<EditEmpresaPage> {
 
   Future<void> _saveEmpresa() async {
     if (_formKey.currentState!.validate()) {
-      final apiUrl = "http://186.226.48.222:8080/empresas/editar/${widget.id}";
+      final apiUrl = "http://127.0.0.1:8080/empresas/editar/${widget.id}";
 
       Map<String, dynamic> empresaData = {
         "nomeFantasia": _nomeFantasiaController.text,

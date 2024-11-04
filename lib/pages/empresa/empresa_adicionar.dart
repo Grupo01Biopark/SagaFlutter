@@ -35,7 +35,7 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
 
   Future<void> _fetchPortesSetores() async {
     final response =
-        await http.get(Uri.parse("http://186.226.48.222:8080/empresas/listar"));
+        await http.get(Uri.parse("http://127.0.0.1:8080/empresas/listar"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);
@@ -50,7 +50,7 @@ class _AddEmpresaPageState extends State<AddEmpresaPage> {
 
   Future<void> _addEmpresa() async {
     if (_formKey.currentState!.validate()) {
-      final apiUrl = "http://186.226.48.222:8080/empresas/adicionar";
+      final apiUrl = "http://127.0.0.1:8080/empresas/adicionar";
 
       Map<String, dynamic> empresaData = {
         "nomeFantasia": _nomeFantasiaController.text,

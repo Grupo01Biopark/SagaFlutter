@@ -25,7 +25,7 @@ import 'package:saga_flutter_app/widgets/MapDialog.dart';
 // }
 
 class ApiCertificadoListService {
-  final String apiUrl = "http://186.226.48.222:8080/certificado/listar";
+  final String apiUrl = "http://127.0.0.1:8080/certificado/listar";
 
   Future<List<dynamic>> fetchData() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -40,7 +40,7 @@ class ApiCertificadoListService {
 
   Future<void> downloadCertificado(int id) async {
     final response = await http
-        .get(Uri.parse("http://186.226.48.222:8080/certificado/$id/emitir"));
+        .get(Uri.parse("http://127.0.0.1:8080/certificado/$id/emitir"));
 
     if (response.statusCode == 200) {
       // Salvar o arquivo temporariamente antes de compartilhar

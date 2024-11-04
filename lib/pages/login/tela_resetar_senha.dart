@@ -13,8 +13,7 @@ class ResetPasswordPage extends StatelessWidget {
     final TextEditingController emailController = TextEditingController();
 
     Future<void> sendPasswordResetRequest(String email) async {
-      final String apiUrl =
-          'http://186.226.48.222:8080/api/auth/forgot-password';
+      final String apiUrl = 'http://127.0.0.1:8080/api/auth/forgot-password';
 
       try {
         final response = await http.post(

@@ -28,7 +28,7 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
   // Função para buscar dados da API
   Future<Map<String, dynamic>> fetchData() async {
     final String apiUrl =
-        "http://186.226.48.222:8080/formulario/${widget.empresaId}/iniciar/respostas/${widget.id}";
+        "http://127.0.0.1:8080/formulario/${widget.empresaId}/iniciar/respostas/${widget.id}";
 
     final response = await http.get(Uri.parse(apiUrl));
 
@@ -246,7 +246,7 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
 
     // Enviar resposta para o backend
     final apiUrl =
-        "http://186.226.48.222:8080/formulario/${widget.id}/iniciar/respostas/${widget.empresaId}/salvar";
+        "http://127.0.0.1:8080/formulario/${widget.id}/iniciar/respostas/${widget.empresaId}/salvar";
 
     final response = await http.post(
       Uri.parse(apiUrl),

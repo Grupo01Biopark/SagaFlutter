@@ -26,7 +26,7 @@ class _FormularioRespostasVisuPageState
   // Função para buscar dados da API
   Future<Map<String, dynamic>> fetchData() async {
     final String apiUrl =
-        "http://186.226.48.222:8080/formulario/respostas/${widget.certId}";
+        "http://127.0.0.1:8080/formulario/respostas/${widget.certId}";
 
     final response = await http.get(Uri.parse(apiUrl));
 

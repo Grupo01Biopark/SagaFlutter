@@ -30,8 +30,8 @@ class _AddPerguntaPageState extends State<AddPerguntaPage> {
   }
 
   Future<void> _fetchEixosPortesSetores() async {
-    final response = await http
-        .get(Uri.parse("http://186.226.48.222:8080/perguntas/listar"));
+    final response =
+        await http.get(Uri.parse("http://127.0.0.1:8080/perguntas/listar"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);
@@ -47,7 +47,7 @@ class _AddPerguntaPageState extends State<AddPerguntaPage> {
 
   Future<void> _addPergunta() async {
     if (_formKey.currentState!.validate()) {
-      final apiUrl = "http://186.226.48.222:8080/perguntas/adicionar";
+      final apiUrl = "http://127.0.0.1:8080/perguntas/adicionar";
 
       Map<String, dynamic> perguntaData = {
         "titulo": _tituloController.text,
