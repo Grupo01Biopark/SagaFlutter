@@ -39,6 +39,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
   List<dynamic> setores = [];
   List<dynamic> portes = [];
 
+  final TextEditingController _tituloController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -119,6 +121,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
       selectedSetor = null;
       selectedPorte = null;
       titleFilter = null;
+      _tituloController.text = "";
     });
   }
 
@@ -126,6 +129,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Stack(
           children: [
             Center(
@@ -209,7 +213,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                   ),
                   SizedBox(height: 24),
                   TextField(
-                    controller: TextEditingController(text: titleFilter),
+                    controller: _tituloController,
                     decoration: InputDecoration(
                       labelText: 'Título',
                       border: OutlineInputBorder(),
