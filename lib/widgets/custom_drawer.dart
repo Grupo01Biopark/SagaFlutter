@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:saga_flutter_app/pages/user/user_provider.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -12,6 +14,11 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
 
+    Uint8List? imageBytes;
+    if (user?.profileImageBase64 != null) {
+      imageBytes = base64Decode(user!.profileImageBase64!);
+    }
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -20,7 +27,10 @@ class CustomDrawer extends StatelessWidget {
             accountName: Text(user?.name ?? 'Nome do Usuário'),
             accountEmail: Text(user?.email ?? 'email@exemplo.com'),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage('URL_DA_FOTO_DO_USUARIO'),
+              backgroundImage: imageBytes != null
+                  ? MemoryImage(imageBytes)
+                  : AssetImage('assets/images/default_user_image.png')
+                      as ImageProvider,
             ),
             decoration: BoxDecoration(
               color: Color(0xFF0F6FC6),
@@ -151,7 +161,8 @@ class CustomDrawer extends StatelessWidget {
                 leading: Icon(Icons.add),
                 title: Text('Cadastrar Usuarios'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/usuario/cadastro');
+                  Navigator.of(context)
+                      .pushReplacementNamed('/usuario/cadastro');
                 },
               ),
             ],
