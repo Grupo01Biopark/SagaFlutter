@@ -89,7 +89,7 @@ class _CertificadoPageState extends State<CertificadoPage> {
       selectedStatus = null;
       selectedDate = null;
       titleFilter = null;
-      _tituloController.text = "null";
+      _tituloController.text = "";
     });
   }
 
@@ -206,13 +206,13 @@ class _CertificadoPageState extends State<CertificadoPage> {
                               : DateFormat('dd/MM/yyyy').format(selectedDate!),
                           style: TextStyle(
                             color: Colors.white, // Define o texto branco
-                            fontSize: 20, // Tamanho da fonte opcional
+                            fontSize: 14, // Tamanho da fonte opcional
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF0F6FC6),
                           padding: EdgeInsets.symmetric(
-                              horizontal: 18, vertical: 14),
+                              horizontal: 14, vertical: 10),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),

@@ -14,7 +14,13 @@ class ApiListUsuario {
 
     if (response.statusCode == 200) {
       var decodedData = json.decode(utf8Response);
-      if (decodedData is Map && decodedData['users'] != null) {
+      if (decodedData['users'] != null) {
+        for (var user in decodedData['users']) {
+          if (user['profileImage'] != null) {
+            user['imageBytes'] = base64Decode(user['profileImage']);
+          }
+        }
+
         return decodedData['users'];
       } else {
         return [];
@@ -94,12 +100,26 @@ class _UsuarioPageState extends State<UsuarioPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              item['name'] ?? '',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Row(
+                              children: [
+                                Center(child: 
+                                CircleAvatar(
+                                  backgroundImage: item['imageBytes'] != null
+                                      ? MemoryImage(item['imageBytes'])
+                                      : AssetImage(
+                                              'assets/images/default_user_image.png')
+                                          as ImageProvider,
+                                ),
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  item['name'] ?? '',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 8),
                             Text(

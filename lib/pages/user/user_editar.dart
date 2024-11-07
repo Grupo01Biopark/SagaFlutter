@@ -1,9 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:image_picker/image_picker.dart';
 
 class EditUserPage extends StatefulWidget {
-  final int userId; // Recebe o ID do usuário para ser editado
+  final int userId;
 
   EditUserPage({required this.userId});
 
@@ -13,20 +17,24 @@ class EditUserPage extends StatefulWidget {
 
 class _EditUserPageState extends State<EditUserPage> {
   final _formKey = GlobalKey<FormState>();
-
-  // Controladores para os campos de texto
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+
+  File? _profileImage;
+  Uint8List? _webImage;
+  String? _profileImageBase64;
 
   @override
   void initState() {
     super.initState();
-    _fetchUserData(); // Carrega os dados do usuário para edição
+    _fetchUserData();
   }
 
   Future<void> _fetchUserData() async {
     final response = await http.get(
-        Uri.parse("http://127.0.0.1:8080/usuarios/listar/${widget.userId}"));
+      Uri.parse("http://127.0.0.1:8080/usuarios/listar/${widget.userId}"),
+    );
 
     if (response.statusCode == 200) {
       var utf8Response = utf8.decode(response.bodyBytes);
@@ -35,9 +43,28 @@ class _EditUserPageState extends State<EditUserPage> {
       setState(() {
         _nameController.text = userData['user']['name'];
         _emailController.text = userData['user']['email'];
+        _profileImageBase64 = userData['user']['profileImage'];
       });
     } else {
       throw Exception('Falha ao carregar dados do usuário');
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      if (kIsWeb) {
+        final bytes = await pickedFile.readAsBytes();
+        setState(() {
+          _webImage = bytes;
+          _profileImageBase64 = base64Encode(bytes);
+        });
+      } else {
+        setState(() {
+          _profileImage = File(pickedFile.path);
+          _profileImageBase64 = base64Encode(_profileImage!.readAsBytesSync());
+        });
+      }
     }
   }
 
@@ -48,6 +75,7 @@ class _EditUserPageState extends State<EditUserPage> {
       Map<String, dynamic> userData = {
         "name": _nameController.text,
         "email": _emailController.text,
+        "profileImage": _profileImageBase64,
       };
 
       final response = await http.post(
@@ -74,6 +102,7 @@ class _EditUserPageState extends State<EditUserPage> {
 
   @override
   Widget build(BuildContext context) {
+    const double avatarSize = 150;
     return Scaffold(
       appBar: AppBar(
         title: Text('Editar Usuário'),
@@ -84,10 +113,35 @@ class _EditUserPageState extends State<EditUserPage> {
           key: _formKey,
           child: ListView(
             children: [
+              const SizedBox(height: 16),
+              Center(
+                child: CircleAvatar(
+                  radius: avatarSize / 2,
+                  backgroundImage: _webImage != null && kIsWeb
+                      ? MemoryImage(_webImage!)
+                      : _profileImage != null
+                          ? FileImage(_profileImage!) as ImageProvider
+                          : (_profileImageBase64 != null
+                              ? MemoryImage(
+                                  base64Decode(_profileImageBase64!),
+                                )
+                              : AssetImage('assets/images/default_user_image.png')),
+                  backgroundColor: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 25),
+              ElevatedButton.icon(
+                onPressed: _pickImage,
+                icon: Icon(Icons.image),
+                label: Text('Selecionar Imagem'),
+              ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(
-                    labelText: 'Nome', border: OutlineInputBorder()),
+                  labelText: 'Nome',
+                  border: OutlineInputBorder(),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira o nome';
@@ -95,11 +149,13 @@ class _EditUserPageState extends State<EditUserPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                    labelText: 'Email', border: OutlineInputBorder()),
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira o email';
@@ -107,15 +163,12 @@ class _EditUserPageState extends State<EditUserPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _editUser,
                 child: Text(
                   'Editar Usuário',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF0F6FC6),
@@ -131,14 +184,4 @@ class _EditUserPageState extends State<EditUserPage> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: EditUserPage(userId: 1), // Passe o ID do usuário para edição
-    theme: ThemeData(
-      primarySwatch: Colors.blueGrey,
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-    ),
-  ));
 }
