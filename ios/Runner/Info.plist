@@ -49,5 +49,11 @@
 	<string>Precisamos da sua localização para mostrar conteúdo relevante.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Precisamos da sua localização para fornecer serviços contínuos.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Precisamos de acesso a sua galeria</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Precisamos de acesso a sua camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Precisamos de acesso a sua galeria</string>
 </dict>
 </plist>
