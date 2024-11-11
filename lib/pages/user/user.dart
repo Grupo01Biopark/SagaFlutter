@@ -102,14 +102,14 @@ class _UsuarioPageState extends State<UsuarioPage> {
                           children: [
                             Row(
                               children: [
-                                Center(child: 
-                                CircleAvatar(
-                                  backgroundImage: item['imageBytes'] != null
-                                      ? MemoryImage(item['imageBytes'])
-                                      : AssetImage(
-                                              'assets/images/default_user_image.png')
-                                          as ImageProvider,
-                                ),
+                                Center(
+                                  child: CircleAvatar(
+                                    backgroundImage: item['imageBytes'] != null
+                                        ? MemoryImage(item['imageBytes'])
+                                        : AssetImage(
+                                                'assets/images/default_user_image.png')
+                                            as ImageProvider,
+                                  ),
                                 ),
                                 SizedBox(width: 10),
                                 Text(

@@ -78,13 +78,11 @@ class _RegistrationUserState extends State<RegistrationUser> {
       _showDialog('Erro', validationMessage);
     } else {
       String? base64Image;
-    if (_profileImage != null && !kIsWeb) {
-      base64Image = base64Encode(_profileImage!.readAsBytesSync());
-    } else if (_webImage != null && kIsWeb) {
-      base64Image = base64Encode(_webImage!);
-    }
-
-
+      if (_profileImage != null && !kIsWeb) {
+        base64Image = base64Encode(_profileImage!.readAsBytesSync());
+      } else if (_webImage != null && kIsWeb) {
+        base64Image = base64Encode(_webImage!);
+      }
 
       final url = Uri.parse('http://127.0.0.1:8080/api/auth/register');
       final response = await http.post(
@@ -177,7 +175,7 @@ class _RegistrationUserState extends State<RegistrationUser> {
                           backgroundColor:
                               Colors.grey, // Cor de fundo caso não tenha imagem
                         ),
-                        const SizedBox(height: 25),
+                      const SizedBox(height: 25),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

@@ -135,21 +135,28 @@ class _DashboardPageState extends State<DashboardPage> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
-                        return Center(child: Text('Erro ao carregar dados de porte: ${snapshot.error}'));
+                        return Center(
+                            child: Text(
+                                'Erro ao carregar dados de porte: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: Text('Nenhum dado de porte disponível'));
+                        return Center(
+                            child: Text('Nenhum dado de porte disponível'));
                       }
                       return SfCircularChart(
                         title: ChartTitle(text: 'Distribuição de Portes'),
-                        legend: Legend(isVisible: true, position: LegendPosition.right),
+                        legend: Legend(
+                            isVisible: true, position: LegendPosition.right),
                         tooltipBehavior: _tooltipBehaviorPorte,
                         series: <CircularSeries>[
                           PieSeries<PorteData, String>(
                             dataSource: snapshot.data,
                             xValueMapper: (PorteData data, _) => data.porte,
-                            yValueMapper: (PorteData data, _) => data.quantidade,
-                            pointColorMapper: (PorteData data, index) => coldColors[index % coldColors.length],
-                            dataLabelSettings: DataLabelSettings(isVisible: true),
+                            yValueMapper: (PorteData data, _) =>
+                                data.quantidade,
+                            pointColorMapper: (PorteData data, index) =>
+                                coldColors[index % coldColors.length],
+                            dataLabelSettings:
+                                DataLabelSettings(isVisible: true),
                             enableTooltip: true,
                           ),
                         ],
@@ -169,21 +176,28 @@ class _DashboardPageState extends State<DashboardPage> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
-                        return Center(child: Text('Erro ao carregar dados de setor: ${snapshot.error}'));
+                        return Center(
+                            child: Text(
+                                'Erro ao carregar dados de setor: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: Text('Nenhum dado de setor disponível'));
+                        return Center(
+                            child: Text('Nenhum dado de setor disponível'));
                       }
                       return SfCircularChart(
                         title: ChartTitle(text: 'Distribuição de Setores'),
-                        legend: Legend(isVisible: true, position: LegendPosition.right),
+                        legend: Legend(
+                            isVisible: true, position: LegendPosition.right),
                         tooltipBehavior: _tooltipBehaviorSetor,
                         series: <CircularSeries>[
                           PieSeries<SetorData, String>(
                             dataSource: snapshot.data,
                             xValueMapper: (SetorData data, _) => data.setor,
-                            yValueMapper: (SetorData data, _) => data.quantidade,
-                            pointColorMapper: (SetorData data, index) => coldColors[index % coldColors.length],
-                            dataLabelSettings: DataLabelSettings(isVisible: true),
+                            yValueMapper: (SetorData data, _) =>
+                                data.quantidade,
+                            pointColorMapper: (SetorData data, index) =>
+                                coldColors[index % coldColors.length],
+                            dataLabelSettings:
+                                DataLabelSettings(isVisible: true),
                             enableTooltip: true,
                           ),
                         ],
@@ -193,74 +207,78 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
               Row(
-  children: [
-    Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: FutureBuilder<int>(
-          future: _totalEmpresasFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Text('Erro ao carregar total de empresas');
-            } else {
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('Total de Empresas',
-                          style: TextStyle(fontSize: 16)),
-                      SizedBox(height: 8),
-                      Text(snapshot.data.toString(),
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold)),
-                    ],
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: FutureBuilder<int>(
+                        future: _totalEmpresasFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Text('Erro ao carregar total de empresas');
+                          } else {
+                            return Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text('Total de Empresas',
+                                        style: TextStyle(fontSize: 16)),
+                                    SizedBox(height: 8),
+                                    Text(snapshot.data.toString(),
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
                   ),
-                ),
-              );
-            }
-          },
-        ),
-      ),
-    ),
-    SizedBox(width: 16), // Gap entre os containers
-    Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: FutureBuilder<int>(
-          future: _totalChecklistsFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Text('Erro ao carregar total de checklists');
-            } else {
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('Total de Checklists',
-                          style: TextStyle(fontSize: 16)),
-                      SizedBox(height: 8),
-                      Text(snapshot.data.toString(),
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold)),
-                    ],
+                  SizedBox(width: 16), // Gap entre os containers
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: FutureBuilder<int>(
+                        future: _totalChecklistsFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Text('Erro ao carregar total de checklists');
+                          } else {
+                            return Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text('Total de Checklists',
+                                        style: TextStyle(fontSize: 16)),
+                                    SizedBox(height: 8),
+                                    Text(snapshot.data.toString(),
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
                   ),
-                ),
-              );
-            }
-          },
-        ),
-      ),
-    ),
-  ],
-),
+                ],
+              ),
               Card(
                 elevation: 4,
                 margin: EdgeInsets.all(16),
@@ -272,9 +290,13 @@ class _DashboardPageState extends State<DashboardPage> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
-                        return Center(child: Text('Erro ao carregar dados de empresas por mês: ${snapshot.error}'));
+                        return Center(
+                            child: Text(
+                                'Erro ao carregar dados de empresas por mês: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: Text('Nenhum dado de empresas por mês disponível'));
+                        return Center(
+                            child: Text(
+                                'Nenhum dado de empresas por mês disponível'));
                       }
                       return SfCartesianChart(
                         primaryXAxis: CategoryAxis(),
@@ -283,10 +305,14 @@ class _DashboardPageState extends State<DashboardPage> {
                         series: <CartesianSeries<dynamic, dynamic>>[
                           ColumnSeries<EmpresasMesData, String>(
                             dataSource: snapshot.data!,
-                            xValueMapper: (EmpresasMesData data, _) => '${data.ano}-${data.mes}',
-                            yValueMapper: (EmpresasMesData data, _) => data.quantidade,
-                            pointColorMapper: (EmpresasMesData data, index) => coldColors[index % coldColors.length],
-                            dataLabelSettings: DataLabelSettings(isVisible: true),
+                            xValueMapper: (EmpresasMesData data, _) =>
+                                '${data.ano}-${data.mes}',
+                            yValueMapper: (EmpresasMesData data, _) =>
+                                data.quantidade,
+                            pointColorMapper: (EmpresasMesData data, index) =>
+                                coldColors[index % coldColors.length],
+                            dataLabelSettings:
+                                DataLabelSettings(isVisible: true),
                           ),
                         ],
                       );

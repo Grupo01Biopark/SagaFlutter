@@ -44,7 +44,7 @@ class _FormularioPageState extends State<FormularioPage> {
   Future<void> _carregarFormularios() async {
     _futureFormularios = apiService.fetchData();
     List<dynamic> data = await _futureFormularios!;
-    
+
     setState(() {
       formularios = data;
     });
@@ -78,11 +78,14 @@ class _FormularioPageState extends State<FormularioPage> {
                   ?.toLowerCase()
                   .contains(filtroNome!.toLowerCase()) ??
           false;
-      final setorMatch =
-          filtroSetor == null || formulario['checklists']['setor'] == filtroSetor;
-      final porteMatch =
-          filtroPorte == null || formulario['checklists']['porte'] == filtroPorte;
-      return nomeMatch && setorMatch && porteMatch && formulario['ativo'] == true;
+      final setorMatch = filtroSetor == null ||
+          formulario['checklists']['setor'] == filtroSetor;
+      final porteMatch = filtroPorte == null ||
+          formulario['checklists']['porte'] == filtroPorte;
+      return nomeMatch &&
+          setorMatch &&
+          porteMatch &&
+          formulario['ativo'] == true;
     }).toList();
   }
 
@@ -143,7 +146,8 @@ class _FormularioPageState extends State<FormularioPage> {
                             hint: Text('Filtrar por Setor'),
                             value: filtroSetor,
                             items: formularios
-                                .map((formulario) => formulario['checklists']['setor'])
+                                .map((formulario) =>
+                                    formulario['checklists']['setor'])
                                 .where((titulo) => titulo != null)
                                 .toSet()
                                 .map((titulo) {
@@ -163,7 +167,8 @@ class _FormularioPageState extends State<FormularioPage> {
                             hint: Text('Filtrar por Porte'),
                             value: filtroPorte,
                             items: formularios
-                                .map((formulario) => formulario['checklists']['porte'])
+                                .map((formulario) =>
+                                    formulario['checklists']['porte'])
                                 .where((titulo) => titulo != null)
                                 .toSet()
                                 .map((titulo) {
@@ -352,7 +357,6 @@ class _FormularioPageState extends State<FormularioPage> {
     );
   }
 }
-
 
 void main() {
   runApp(MaterialApp(

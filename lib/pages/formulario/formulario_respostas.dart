@@ -304,83 +304,89 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MainScaffold(
-      title: 'Formulários',
-      body: FutureBuilder<Map<String, dynamic>>(
-        future: formularioData,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Erro ao carregar dados.'));
-          } else if (!snapshot.hasData) {
-            return Center(child: Text('Nenhum dado encontrado.'));
-          }
+    return GestureDetector(
+      onTap: () {
+        // Fecha o teclado ao tocar fora do campo
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: MainScaffold(
+        title: 'Formulários',
+        body: FutureBuilder<Map<String, dynamic>>(
+          future: formularioData,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Erro ao carregar dados.'));
+            } else if (!snapshot.hasData) {
+              return Center(child: Text('Nenhum dado encontrado.'));
+            }
 
-          final data = snapshot.data!;
-          final nomeFormulario = data['formulario']['nome'];
-          final ambiental = data['ambiental']['perguntas'];
-          final social = data['social']['perguntas'];
-          final governanca = data['governanca']['perguntas'];
+            final data = snapshot.data!;
+            final nomeFormulario = data['formulario']['nome'];
+            final ambiental = data['ambiental']['perguntas'];
+            final social = data['social']['perguntas'];
+            final governanca = data['governanca']['perguntas'];
 
-          return DefaultTabController(
-            length: 3,
-            child: Scaffold(
-              appBar: AppBar(
-                bottom: TabBar(
-                  tabs: [
-                    Tab(text: 'Ambiental'),
-                    Tab(text: 'Social'),
-                    Tab(text: 'Governança'),
+            return DefaultTabController(
+              length: 3,
+              child: Scaffold(
+                appBar: AppBar(
+                  bottom: TabBar(
+                    tabs: [
+                      Tab(text: 'Ambiental'),
+                      Tab(text: 'Social'),
+                      Tab(text: 'Governança'),
+                    ],
+                    indicatorColor: Color(0xFF0F6FC6),
+                    labelColor: Color(0xFF0F6FC6),
+                  ),
+                  title: Text(nomeFormulario), // Nome do formulário na AppBar
+                ),
+                body: TabBarView(
+                  children: [
+                    // Aba Ambiental
+                    buildPerguntasList(ambiental, 'ambiental'),
+                    // Aba Social
+                    buildPerguntasList(social, 'social'),
+                    // Aba Governança
+                    buildPerguntasList(governanca, 'governanca'),
                   ],
-                  indicatorColor: Color(0xFF0F6FC6),
-                  labelColor: Color(0xFF0F6FC6),
                 ),
-                title: Text(nomeFormulario), // Nome do formulário na AppBar
-              ),
-              body: TabBarView(
-                children: [
-                  // Aba Ambiental
-                  buildPerguntasList(ambiental, 'ambiental'),
-                  // Aba Social
-                  buildPerguntasList(social, 'social'),
-                  // Aba Governança
-                  buildPerguntasList(governanca, 'governanca'),
-                ],
-              ),
-              floatingActionButton: Container(
-                width: 150, // Ajuste a largura do botão
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                floatingActionButton: Container(
+                  width: 150, // Ajuste a largura do botão
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-                    if (validateChecklist()) {
-                      enviarRespostas();
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              'Por favor, preencha todos os campos obrigatórios.'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  },
-                  child: Text(
-                    'Enviar',
-                    style: TextStyle(
-                      color: Colors.white, // Altere para a cor desejada
+                    onPressed: () {
+                      if (validateChecklist()) {
+                        enviarRespostas();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Por favor, preencha todos os campos obrigatórios.'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+                    child: Text(
+                      'Enviar',
+                      style: TextStyle(
+                        color: Colors.white, // Altere para a cor desejada
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

@@ -125,7 +125,8 @@ class _EditUserPageState extends State<EditUserPage> {
                               ? MemoryImage(
                                   base64Decode(_profileImageBase64!),
                                 )
-                              : AssetImage('assets/images/default_user_image.png')),
+                              : AssetImage(
+                                  'assets/images/default_user_image.png')),
                   backgroundColor: Colors.grey,
                 ),
               ),
