@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'checklists_editar.dart';
 
 class ApiListChecklists {
-  final String apiUrl = "http://127.0.0.1:8080/checklists/listar";
+  final String apiUrl = "http://138.186.234.48:8080/checklists/listar";
 
   Future<Map<String, dynamic>> fetchData() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -49,8 +49,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   Future<void> _fetchEixosPortesSetores() async {
-    final response =
-        await http.get(Uri.parse("http://127.0.0.1:8080/perguntas/listar"));
+    final response = await http
+        .get(Uri.parse("http://138.186.234.48:8080/perguntas/listar"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);
@@ -66,7 +66,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   Future<void> deleteChecklist(String checklistId) async {
-    final url = 'http://127.0.0.1:8080/checklists/inativar/$checklistId';
+    final url = 'http://138.186.234.48:8080/checklists/inativar/$checklistId';
 
     try {
       final response = await http.post(Uri.parse(url));
@@ -162,54 +162,73 @@ class _ChecklistPageState extends State<ChecklistPage> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      DropdownButton<String>(
-                        hint: Text("Eixo"),
-                        value: selectedEixo,
-                        items:
-                            eixos.map<DropdownMenuItem<String>>((dynamic eixo) {
-                          return DropdownMenuItem<String>(
-                            value: eixo['titulo'],
-                            child: Text(eixo['titulo']),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() => selectedEixo = value);
-                        },
-                      ),
-                      SizedBox(width: 10),
-                      DropdownButton<String>(
-                        hint: Text("Setor"),
-                        value: selectedSetor,
-                        items: setores
-                            .map<DropdownMenuItem<String>>((dynamic setor) {
-                          return DropdownMenuItem<String>(
-                            value: setor['titulo'],
-                            child: Text(setor['titulo']),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() => selectedSetor = value);
-                        },
-                      ),
-                      SizedBox(width: 10),
-                      DropdownButton<String>(
-                        hint: Text("Porte"),
-                        value: selectedPorte,
-                        items: portes
-                            .map<DropdownMenuItem<String>>((dynamic porte) {
-                          return DropdownMenuItem<String>(
-                            value: porte['titulo'],
-                            child: Text(porte['titulo']),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() => selectedPorte = value);
-                        },
-                      ),
-                    ],
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Divide a largura disponível pelo número de DropdownButtons
+                      double dropdownWidth = (constraints.maxWidth - 20) / 3;
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: dropdownWidth,
+                            child: DropdownButton<String>(
+                              isExpanded: true,
+                              hint: Text("Eixo"),
+                              value: selectedEixo,
+                              items: eixos.map<DropdownMenuItem<String>>(
+                                  (dynamic eixo) {
+                                return DropdownMenuItem<String>(
+                                  value: eixo['titulo'],
+                                  child: Text(eixo['titulo']),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() => selectedEixo = value);
+                              },
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Container(
+                            width: dropdownWidth,
+                            child: DropdownButton<String>(
+                              isExpanded: true,
+                              hint: Text("Setor"),
+                              value: selectedSetor,
+                              items: setores.map<DropdownMenuItem<String>>(
+                                  (dynamic setor) {
+                                return DropdownMenuItem<String>(
+                                  value: setor['titulo'],
+                                  child: Text(setor['titulo']),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() => selectedSetor = value);
+                              },
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Container(
+                            width: dropdownWidth,
+                            child: DropdownButton<String>(
+                              isExpanded: true,
+                              hint: Text("Porte"),
+                              value: selectedPorte,
+                              items: portes.map<DropdownMenuItem<String>>(
+                                  (dynamic porte) {
+                                return DropdownMenuItem<String>(
+                                  value: porte['titulo'],
+                                  child: Text(porte['titulo']),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() => selectedPorte = value);
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   SizedBox(height: 24),
                   TextField(

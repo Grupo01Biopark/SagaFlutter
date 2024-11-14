@@ -4,6 +4,7 @@ import 'package:saga_flutter_app/pages/formulario/formulario.dart';
 import 'dart:convert';
 import 'package:saga_flutter_app/widgets/main_scaffold.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class FormularioRespostasPage extends StatefulWidget {
   final String id;
@@ -18,6 +19,9 @@ class FormularioRespostasPage extends StatefulWidget {
 
 class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
   late Future<Map<String, dynamic>> formularioData;
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  String _text = "";
 
   // Mapa para armazenar o estado dos checkboxes e do campo de texto
   Map<int, String> responses =
@@ -28,7 +32,7 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
   // Função para buscar dados da API
   Future<Map<String, dynamic>> fetchData() async {
     final String apiUrl =
-        "http://127.0.0.1:8080/formulario/${widget.empresaId}/iniciar/respostas/${widget.id}";
+        "http://138.186.234.48:8080/formulario/${widget.empresaId}/iniciar/respostas/${widget.id}";
 
     final response = await http.get(Uri.parse(apiUrl));
 
@@ -53,10 +57,32 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
     }
   }
 
+  void _listen(int perguntaId) async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (val) => print('onStatus: $val'),
+        onError: (val) => print('onError: $val'),
+      );
+      if (available) {
+        setState(() => _isListening = true);
+        _speech.listen(
+          onResult: (val) => setState(() {
+            _text = val.recognizedWords;
+            textControllers[perguntaId]?.text = _text;
+          }),
+        );
+      }
+    } else {
+      setState(() => _isListening = false); // reset listening state
+      _speech.stop();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     formularioData = fetchData();
+    _speech = stt.SpeechToText();
   }
 
   // Função para construir a lista de cards de perguntas
@@ -126,14 +152,24 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
                 SizedBox(height: 16),
 
                 // Campo de texto (Textarea)
-                TextField(
-                  controller: textControllers[perguntaId],
-                  maxLines: 4,
-                  decoration: InputDecoration(
-                    hintText: 'Digite uma observação aqui...',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: textControllers[perguntaId],
+                        maxLines: 4,
+                        decoration: InputDecoration(
+                          hintText: 'Digite uma observação aqui...',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
+                      onPressed: () => _listen(perguntaId),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
@@ -246,7 +282,7 @@ class _FormularioRespostasPageState extends State<FormularioRespostasPage> {
 
     // Enviar resposta para o backend
     final apiUrl =
-        "http://127.0.0.1:8080/formulario/${widget.id}/iniciar/respostas/${widget.empresaId}/salvar";
+        "http://138.186.234.48:8080/formulario/${widget.id}/iniciar/respostas/${widget.empresaId}/salvar";
 
     final response = await http.post(
       Uri.parse(apiUrl),

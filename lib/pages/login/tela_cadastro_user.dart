@@ -84,7 +84,7 @@ class _RegistrationUserState extends State<RegistrationUser> {
         base64Image = base64Encode(_webImage!);
       }
 
-      final url = Uri.parse('http://127.0.0.1:8080/api/auth/register');
+      final url = Uri.parse('http://138.186.234.48:8080/api/auth/register');
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
@@ -151,7 +151,7 @@ class _RegistrationUserState extends State<RegistrationUser> {
                             fontWeight: FontWeight.bold,
                             fontSize: 24,
                             color: Colors.black,
-                          ),
+                          ), textAlign: TextAlign.center,
                         ),
                       ),
                       const SizedBox(height: 25),

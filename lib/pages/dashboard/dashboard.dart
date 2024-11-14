@@ -4,11 +4,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ApiDashboardService {
-  final String apiPorte = "http://127.0.0.1:8080/dashboard/porte";
-  final String apiSetor = "http://127.0.0.1:8080/dashboard/setor";
-  final String apiTotal = "http://127.0.0.1:8080/dashboard/total";
-  final String apiChecklist = "http://127.0.0.1:8080/dashboard/checklist";
-  final String apiEmpresasMes = "http://127.0.0.1:8080/dashboard/mes";
+  final String apiPorte = "http://138.186.234.48:8080/dashboard/porte";
+  final String apiSetor = "http://138.186.234.48:8080/dashboard/setor";
+  final String apiTotal = "http://138.186.234.48:8080/dashboard/total";
+  final String apiChecklist = "http://138.186.234.48:8080/dashboard/checklist";
+  final String apiEmpresasMes = "http://138.186.234.48:8080/dashboard/mes";
 
   Future<Map<String, dynamic>> fetchPorteData() async {
     final response = await http.get(Uri.parse(apiPorte));
@@ -227,7 +227,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text('Total de Empresas',
-                                        style: TextStyle(fontSize: 16)),
+                                        style: TextStyle(fontSize: 16), textAlign: TextAlign.center,),
                                     SizedBox(height: 8),
                                     Text(snapshot.data.toString(),
                                         style: TextStyle(
@@ -262,7 +262,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text('Total de Checklists',
-                                        style: TextStyle(fontSize: 16)),
+                                        style: TextStyle(fontSize: 16), textAlign: TextAlign.center,),
                                     SizedBox(height: 8),
                                     Text(snapshot.data.toString(),
                                         style: TextStyle(

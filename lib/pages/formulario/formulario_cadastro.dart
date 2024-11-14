@@ -5,11 +5,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ApiFormularioListService {
-  final String apiUrl = "http://127.0.0.1:8080/formulario";
-  final String apiAdicionarUrl = "http://127.0.0.1:8080/formulario/adicionar";
+  final String apiUrl = "http://138.186.234.48:8080/formulario";
+  final String apiAdicionarUrl =
+      "http://138.186.234.48:8080/formulario/adicionar";
 
   // Novo endpoint para perguntas
-  final String perguntasUrl = "http://127.0.0.1:8080/checklists";
+  final String perguntasUrl = "http://138.186.234.48:8080/checklists";
 
   Future<Map<String, dynamic>> fetchData() async {
     final response = await http.get(Uri.parse(apiUrl));

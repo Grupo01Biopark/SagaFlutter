@@ -21,7 +21,8 @@ class ResetLoginPasswordPage extends StatelessWidget {
     print(password);
 
     try {
-      final url = Uri.parse('http://127.0.0.1:8080/api/auth/reset-password');
+      final url =
+          Uri.parse('http://138.186.234.48:8080/api/auth/reset-password');
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},

@@ -29,7 +29,7 @@ class _FormularioIniciarPageState extends State<FormularioIniciarPage> {
 
   Future<List<Map<String, dynamic>>> fetchData() async {
     final String apiUrl =
-        "http://127.0.0.1:8080/formulario/listar/empresas/${widget.id}";
+        "http://138.186.234.48:8080/formulario/listar/empresas/${widget.id}";
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
