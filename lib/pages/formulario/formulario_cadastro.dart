@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -93,12 +95,10 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
       Map<String, dynamic> formularioData = {
         "titulo": titulo,
         "descricao": descricao,
-        "governancaChecklist": governancaChecklists
-            .firstWhere((item) => item['titulo'] == selectedGovernanca)['id'],
-        "socialChecklist": socialChecklists
-            .firstWhere((item) => item['titulo'] == selectedSocial)['id'],
-        "ambientalChecklist": ambientalChecklists
-            .firstWhere((item) => item['titulo'] == selectedAmbiental)['id'],
+        // Converte para número inteiro usando int.parse
+        "governancaChecklist": int.parse(selectedGovernanca!),
+        "socialChecklist": int.parse(selectedSocial!),
+        "ambientalChecklist": int.parse(selectedAmbiental!),
       };
 
       try {
@@ -112,6 +112,12 @@ class _FormularioCadastroPageState extends State<FormularioCadastroPage> {
             backgroundColor: Colors.green,
           ),
         );
+        double seconds = 3;
+        Duration duration = Duration(seconds: seconds.toInt());
+
+        Future.delayed(duration, () {
+          Navigator.of(context).pushReplacementNamed('/formularios/listagem');
+        });
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Erro ao cadastrar formulário')));
