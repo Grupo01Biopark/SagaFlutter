@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:saga_flutter_app/pages/perguntas/pergunta_editar.dart';
 
 class ApiListPergunta {
-  final String apiUrl = "http://127.0.0.1:8080/perguntas/listar";
+  final String apiUrl = "http://138.186.234.48:8080/perguntas/listar";
 
   Future<List<dynamic>> fetchData() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -55,8 +55,8 @@ class _PerguntaPageState extends State<PerguntaPage> {
   }
 
   Future<void> _fetchEixosPortesSetores() async {
-    final response =
-        await http.get(Uri.parse("http://127.0.0.1:8080/perguntas/listar"));
+    final response = await http
+        .get(Uri.parse("http://138.186.234.48:8080/perguntas/listar"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);
@@ -71,7 +71,7 @@ class _PerguntaPageState extends State<PerguntaPage> {
   }
 
   Future<void> deleteQuestion(String questionId) async {
-    final url = 'http://127.0.0.1:8080/perguntas/excluir/$questionId';
+    final url = 'http://138.186.234.48:8080/perguntas/excluir/$questionId';
 
     try {
       final response = await http.delete(Uri.parse(url));
@@ -140,65 +140,78 @@ class _PerguntaPageState extends State<PerguntaPage> {
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: DropdownButton<String>(
-                            hint: Text('Eixo'),
-                            value: _selectedEixo,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _selectedEixo = newValue;
-                              });
-                            },
-                            items: eixos
-                                .map<DropdownMenuItem<String>>((dynamic eixo) {
-                              return DropdownMenuItem<String>(
-                                value: eixo['titulo'],
-                                child: Text(eixo['titulo']),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                        SizedBox(width: 24), // Aumentei o espaçamento
-                        Expanded(
-                          child: DropdownButton<String>(
-                            hint: Text('Setor'),
-                            value: _selectedSetor,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _selectedSetor = newValue;
-                              });
-                            },
-                            items: setores
-                                .map<DropdownMenuItem<String>>((dynamic setor) {
-                              return DropdownMenuItem<String>(
-                                value: setor['titulo'],
-                                child: Text(setor['titulo']),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                        SizedBox(width: 24), // Aumentei o espaçamento
-                        Expanded(
-                          child: DropdownButton<String>(
-                            hint: Text('Porte'),
-                            value: _selectedPorte,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _selectedPorte = newValue;
-                              });
-                            },
-                            items: portes
-                                .map<DropdownMenuItem<String>>((dynamic porte) {
-                              return DropdownMenuItem<String>(
-                                value: porte['titulo'],
-                                child: Text(porte['titulo']),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        // Divide a largura disponível pelo número de DropdownButtons
+                        double dropdownWidth = (constraints.maxWidth - 16) / 3;
+
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: dropdownWidth,
+                              child: DropdownButton<String>(
+                                isExpanded:
+                                    true, // Permite que o texto ocupe toda a largura
+                                hint: Text('Eixo'),
+                                value: _selectedEixo,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedEixo = newValue;
+                                  });
+                                },
+                                items: eixos.map<DropdownMenuItem<String>>(
+                                    (dynamic eixo) {
+                                  return DropdownMenuItem<String>(
+                                    value: eixo['titulo'],
+                                    child: Text(eixo['titulo']),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                            Container(
+                              width: dropdownWidth,
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                hint: Text('Setor'),
+                                value: _selectedSetor,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedSetor = newValue;
+                                  });
+                                },
+                                items: setores.map<DropdownMenuItem<String>>(
+                                    (dynamic setor) {
+                                  return DropdownMenuItem<String>(
+                                    value: setor['titulo'],
+                                    child: Text(setor['titulo']),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                            Container(
+                              width: dropdownWidth,
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                hint: Text('Porte'),
+                                value: _selectedPorte,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedPorte = newValue;
+                                  });
+                                },
+                                items: portes.map<DropdownMenuItem<String>>(
+                                    (dynamic porte) {
+                                  return DropdownMenuItem<String>(
+                                    value: porte['titulo'],
+                                    child: Text(porte['titulo']),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                     SizedBox(height: 16),
                     TextField(
@@ -219,8 +232,8 @@ class _PerguntaPageState extends State<PerguntaPage> {
                       child: Text(
                         'Limpar Filtros',
                         style: TextStyle(
-                          color: Colors.white, // Define o texto branco
-                          fontSize: 20, // Tamanho da fonte opcional
+                          color: Colors.white,
+                          fontSize: 20,
                         ),
                       ),
                       style: ElevatedButton.styleFrom(

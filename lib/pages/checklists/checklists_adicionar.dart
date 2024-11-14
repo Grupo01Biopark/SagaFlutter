@@ -31,8 +31,8 @@ class _AddChecklistPage extends State<AddChecklistPage> {
   }
 
   Future<void> _fetchEixosSetoresPortes() async {
-    final response =
-        await http.get(Uri.parse("http://127.0.0.1:8080/checklists/listar"));
+    final response = await http
+        .get(Uri.parse("http://138.186.234.48:8080/checklists/listar"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);
@@ -45,8 +45,8 @@ class _AddChecklistPage extends State<AddChecklistPage> {
   }
 
   Future<void> _fetchPerguntas() async {
-    final response =
-        await http.get(Uri.parse("http://127.0.0.1:8080/perguntas/listar"));
+    final response = await http
+        .get(Uri.parse("http://138.186.234.48:8080/perguntas/listar"));
     if (response.statusCode == 200) {
       var utf8Response = utf8.decode(response.bodyBytes);
       var allPerguntas = json.decode(utf8Response)['perguntas'];
@@ -95,7 +95,7 @@ class _AddChecklistPage extends State<AddChecklistPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8080/checklists/adicionar'),
+        Uri.parse('http://138.186.234.48:8080/checklists/adicionar'),
         headers: {"Content-Type": "application/json"},
         body: json.encode(checklistData),
       );

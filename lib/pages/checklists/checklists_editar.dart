@@ -25,7 +25,7 @@ class _EditChecklistPage extends State<EditChecklistPage> {
 
   Future<void> _fetchChecklist() async {
     final response = await http.get(Uri.parse(
-        "http://127.0.0.1:8080/checklists/editar/${widget.checklistId}"));
+        "http://138.186.234.48:8080/checklists/editar/${widget.checklistId}"));
     if (response.statusCode == 200) {
       var utf8Response = utf8.decode(response.bodyBytes);
       var checklistData = json.decode(utf8Response);
@@ -52,7 +52,7 @@ class _EditChecklistPage extends State<EditChecklistPage> {
     try {
       final response = await http.put(
         Uri.parse(
-            'http://127.0.0.1:8080/checklists/editar/${widget.checklistId}'),
+            'http://138.186.234.48:8080/checklists/editar/${widget.checklistId}'),
         headers: {"Content-Type": "application/json"},
         body: json.encode(checklistData),
       );

@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    final url = Uri.parse('http://127.0.0.1:8080/api/auth/login');
+    final url = Uri.parse('http://138.186.234.48:8080/api/auth/login');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -221,27 +221,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 40,
-                    child: TextButton(
-                      child: const Text(
-                        "Cadastre-se",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 54, 181, 255),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const RegistrationUser(),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
                 ],
               ),
             ),

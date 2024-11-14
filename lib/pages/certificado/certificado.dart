@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:intl/intl.dart';
 
 class ApiCertificadoListService {
-  final String apiUrl = "http://127.0.0.1:8080/certificado/listar";
+  final String apiUrl = "http://138.186.234.48:8080/certificado/listar";
 
   Future<List<dynamic>> fetchData() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -27,7 +27,7 @@ class ApiCertificadoListService {
 
   Future<void> downloadCertificado(int id) async {
     final response = await http
-        .get(Uri.parse("http://127.0.0.1:8080/certificado/$id/emitir"));
+        .get(Uri.parse("http://138.186.234.48:8080/certificado/$id/emitir"));
 
     if (response.statusCode == 200) {
       // Salvar o arquivo temporariamente antes de compartilhar
@@ -71,8 +71,8 @@ class _CertificadoPageState extends State<CertificadoPage> {
   }
 
   Future<void> _fetchCertificados() async {
-    final response =
-        await http.get(Uri.parse("http://127.0.0.1:8080/certificado/listar"));
+    final response = await http
+        .get(Uri.parse("http://138.186.234.48:8080/certificado/listar"));
     if (response.statusCode == 200) {
       setState(() {
         var utf8Response = utf8.decode(response.bodyBytes);

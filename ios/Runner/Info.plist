@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Saga Flutter App</string>
+	<string>Saga App</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -51,9 +51,13 @@
 	<string>Precisamos da sua localização para fornecer serviços contínuos.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Precisamos de acesso a sua galeria</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Precisamos de acesso a sua camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Precisamos de acesso a sua galeria</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Precisamos de acesso a sua camera</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Precisamos de acesso ao seu microfone</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Precisamos de acesso ao seu microfone</string>
 </dict>
 </plist>

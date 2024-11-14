@@ -33,7 +33,7 @@ class _EditUserPageState extends State<EditUserPage> {
 
   Future<void> _fetchUserData() async {
     final response = await http.get(
-      Uri.parse("http://127.0.0.1:8080/usuarios/listar/${widget.userId}"),
+      Uri.parse("http://138.186.234.48:8080/usuarios/listar/${widget.userId}"),
     );
 
     if (response.statusCode == 200) {
@@ -70,7 +70,8 @@ class _EditUserPageState extends State<EditUserPage> {
 
   Future<void> _editUser() async {
     if (_formKey.currentState!.validate()) {
-      final apiUrl = "http://127.0.0.1:8080/usuarios/editar/${widget.userId}";
+      final apiUrl =
+          "http://138.186.234.48:8080/usuarios/editar/${widget.userId}";
 
       Map<String, dynamic> userData = {
         "name": _nameController.text,
